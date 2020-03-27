@@ -1,0 +1,48 @@
+@import url(https://fonts.googleapis.com/css?family=Fira+Sans);
+@import url(https://fonts.googleapis.com/css?family=IBM+Plex+Serif);
+
+* {
+	box-sizing: border-box;
+}
+
+body {
+	font-family: 'IBM Plex Serif', serif;
+	font-size: 18px;
+	margin: 0;
+	padding: 0;
+}
+
+#root {
+	align-items: stretch;
+	display: grid;
+	grid-template-rows: 150px auto 100px;
+	height: 100vh;
+}
+
+.site-header {
+	background-color: black;
+	color: white;
+	padding: 20px;
+}
+
+.main {
+	margin: 0 auto;
+	max-width: 64em;
+	padding: 0 20px;
+}
+
+.site-footer {
+	background-color: #3b5875;
+	color: white;
+	font-family: 'Fira Sans', sans-serif;
+	font-size: 12px;
+	padding: 20px;
+	text-align: center;
+}
+
+h1,
+h2,
+h3,
+h4 {
+	font-family: 'Fira Sans', sans-serif;
+}

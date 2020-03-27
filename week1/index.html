@@ -1,0 +1,69 @@
+<html lang="en">
+	<head>
+		<meta charset="UTF-8" />
+		<meta name="viewport" content="width=device-width, initial-scale=1.0" />
+		<title>React Bootcamp Week 1</title>
+		<script src="react.js"></script>
+		<script src="react-dom.js"></script>
+		<script src="babel.js"></script>
+		<link rel="stylesheet" href="style.css" />
+	</head>
+	<body>
+		<div id="root"></div>
+		<script type="text/babel">
+			const Header = () => {
+				return (
+					<header className='site-header'>
+						<h1 className='site-title'>One-page React Site</h1>
+					</header>
+				);
+			};
+			const Content = () => {
+				return (
+					<div className='main'>
+						<h2>This is some content.</h2>
+						<p>
+							Lorem ipsum dolor sit amet consectetur adipiscing elit, at posuere
+							interdum turpis mollis dis porttitor odio, integer class gravida
+							metus dictum vehicula. Imperdiet donec dignissim turpis primis
+							sagittis porttitor non, lacinia nullam accumsan lectus mus eget
+							luctus at, aenean ornare lacus arcu sociis ridiculus. Sociis erat
+							blandit class porttitor nec convallis bibendum, at curabitur ut
+							lectus himenaeos ultrices, ullamcorper nullam tincidunt habitasse
+							senectus eleifend.
+						</p>
+						<p>
+							Vel pharetra vitae montes a aenean enim, magna fringilla at
+							potenti urna cras dignissim, nisi lobortis rhoncus ornare euismod.
+							Mattis nulla odio suspendisse eget sapien vestibulum, augue arcu
+							duis malesuada eros hac, platea tristique eu proin quam. Odio hac
+							turpis natoque maecenas curae semper augue class senectus est,
+							faucibus eros tellus in dapibus felis eu pretium convallis
+							parturient, quis quam feugiat lacinia leo sapien mus sem
+							fringilla.
+						</p>
+					</div>
+				);
+			};
+			const Footer = () => {
+				const date = new Date();
+				const year = date.getFullYear();
+				return <footer className='site-footer'>&copy; Copyright {year}</footer>;
+			};
+			const App = () => {
+				return (
+					<React.Fragment>
+						<Header />
+						<Content />
+						<Footer />
+					</React.Fragment>
+				);
+			};
+			ReactDOM.render(
+				// Place your element or component here to test
+				<App />,
+				document.getElementById('root')
+			);
+		</script>
+	</body>
+</html>
