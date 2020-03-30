@@ -1,0 +1,26 @@
+@import 'variables.scss';
+
+* {
+	box-sizing: border-box;
+}
+
+body {
+	font-family: $font-serif;
+	font-size: 18px;
+	margin: 0;
+	padding: 0;
+}
+
+.App {
+	align-items: stretch;
+	display: grid;
+	grid-template-rows: 150px auto 100px;
+	height: 100vh;
+}
+
+h1,
+h2,
+h3,
+h4 {
+	font-family: $font-sans;
+}
