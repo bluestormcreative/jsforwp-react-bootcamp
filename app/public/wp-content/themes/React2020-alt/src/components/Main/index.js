@@ -1,5 +1,5 @@
 const { Component } = wp.element;
-// import './main.scss';
+import './main.scss';
 
 export default class Main extends Component {
 	render() {

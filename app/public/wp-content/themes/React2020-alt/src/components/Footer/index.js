@@ -1,5 +1,5 @@
 const { Component } = wp.element;
-// import './footer.scss';
+import './footer.scss';
 
 const date = new Date();
 const year = date.getFullYear();

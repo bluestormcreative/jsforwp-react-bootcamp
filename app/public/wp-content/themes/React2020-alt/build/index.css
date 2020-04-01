@@ -1,0 +1,16 @@
+@import url(https://fonts.googleapis.com/css?family=Fira + Sans);
+@import url(https://fonts.googleapis.com/css?family=IBM + Plex + Serif);
+@import url(https://fonts.googleapis.com/css?family=Fira + Sans);
+@import url(https://fonts.googleapis.com/css?family=IBM + Plex + Serif);
+@import url(https://fonts.googleapis.com/css?family=Fira + Sans);
+@import url(https://fonts.googleapis.com/css?family=IBM + Plex + Serif);
+@import url(https://fonts.googleapis.com/css?family=Fira + Sans);
+@import url(https://fonts.googleapis.com/css?family=IBM + Plex + Serif);
+.site-header{background-color:#000;color:#fff;padding:20px}
+
+.site-content{margin:0 auto;max-width:64em;padding:0 20px}.site-content p{font-family:"IBM Plex Serif",serif}
+
+.site-footer{background-color:#3b5875;color:#fff;font-family:"Fira Sans",sans-serif;font-size:12px;padding:20px;text-align:center}
+
+*{box-sizing:border-box}body{font-family:"IBM Plex Serif",serif;font-size:18px;margin:0;padding:0}.App{align-items:stretch;display:grid;grid-template-rows:150px auto 100px;height:100vh}h1,h2,h3,h4{font-family:"Fira Sans",sans-serif}
+
