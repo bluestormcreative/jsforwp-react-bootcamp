@@ -1,0 +1,6 @@
+@import url(https://fonts.googleapis.com/css?family=Fira + Sans);@import url(https://fonts.googleapis.com/css?family=IBM + Plex + Serif);.site-content {
+  margin: 0 auto;
+  max-width: 64em;
+  padding: 0 20px; }
+  .site-content p {
+    font-family: "IBM Plex Serif", serif; }
