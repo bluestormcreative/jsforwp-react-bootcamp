@@ -22,10 +22,10 @@ function react2020alt_enqueue_styles() {
 		time() // wp_get_theme()->get('Version').
 	);
 
-	wp_enqueue_script(
+	wp_enqueue_style(
 		'react2020alt-style',
 		get_stylesheet_directory_uri() . '/build/index.css',
-		array( $parent_style ),
+		[],
 		time() // For production use wp_get_theme()->get('Version').      
 	);
 
