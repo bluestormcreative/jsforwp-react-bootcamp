@@ -1,0 +1,50 @@
+.counter {
+	align-items: center;
+	background-color: #fdfdfd;
+	border: 1px solid #ddd;
+	display: flex;
+	height: 200px;
+	flex-wrap: wrap;
+	font-family: sans-serif;
+	justify-content: center;
+	margin: 50px auto;
+	padding: 30px;
+	width: 300px;
+}
+
+.counter h2 {
+	font-size: 40px;
+	text-align: center;
+	width: 100%;
+}
+
+.counter .button {
+	align-items: center;
+	background-color: #f73859;
+	border: 0;
+	border-radius: 3px;
+	color: white;
+	display: flex;
+	font-size: 18px;
+	justify-content: center;
+	padding: 5px 10px;
+	transition: transform 0.1s ease;
+	width: calc(50% - 10px);
+}
+
+.counter .button:hover {
+	transform: scale(1.1);
+}
+
+.counter .button--inc {
+	margin-right: 10px;
+}
+
+.counter .button--dec {
+	background-color: #00adb5;
+}
+
+.counter .button--reset {
+	background-color: #ffd460;
+	width: 100%;
+}

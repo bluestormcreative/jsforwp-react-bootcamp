@@ -1,4 +1,5 @@
 import React from 'react';
+import './counter-styles.css';
 
 const Heading = (props) => {
 	// State becomes props here...
@@ -6,17 +7,33 @@ const Heading = (props) => {
 };
 
 const Button = (props) => {
-	return <button onClick={props.onClick}>{props.buttonText}</button>;
+	return (
+		<button className={props.className} onClick={props.onClick}>
+			{props.buttonText}
+		</button>
+	);
 };
 
 const Counter = (props) => {
 	return (
-		<>
+		<div className='counter'>
 			<Heading count={props.count} />
-			<Button onClick={props.increment} buttonText='Increment Me!' />
-			<Button onClick={props.decrement} buttonText='Decrement Me!' />
-			<Button onClick={props.reset} buttonText='Reset Me!' />
-		</>
+			<Button
+				className='button button--inc'
+				onClick={props.increment}
+				buttonText='Increment Me!'
+			/>
+			<Button
+				className='button button--dec'
+				onClick={props.decrement}
+				buttonText='Decrement Me!'
+			/>
+			<Button
+				className='button button--reset'
+				onClick={props.reset}
+				buttonText='Reset Me!'
+			/>
+		</div>
 	);
 };
 
