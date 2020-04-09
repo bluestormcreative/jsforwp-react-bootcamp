@@ -1,0 +1,10 @@
+.site-header {
+	background-color: black;
+	color: white;
+	padding: 40px 0;
+}
+
+.site-header h2 {
+	margin: 0;
+	padding: 0;
+}

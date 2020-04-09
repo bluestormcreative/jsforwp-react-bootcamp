@@ -1,5 +1,6 @@
 import React from 'react';
 import Overlay from '../Overlay';
+import './header.css';
 
 export default class Header extends React.Component {
 	render() {
