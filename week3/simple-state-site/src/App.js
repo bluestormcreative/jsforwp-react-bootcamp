@@ -14,16 +14,20 @@ class App extends React.Component {
 		event.preventDefault();
 		const name = document.querySelector('input[name]').value;
 		const overlay = document.querySelector('.overlay');
-		this.setState({ username: name });
+		if (name) {
+			this.setState({ username: name });
+		}
 		this.setState({ loginCount: this.state.loginCount + 1 });
 		overlay.classList.add('hidden');
 	};
 
 	resetOverlay = () => {
 		const overlay = document.querySelector('.overlay');
+		const formName = overlay.querySelector('input[name]');
 		if (overlay.classList.contains('hidden')) {
 			overlay.classList.remove('hidden');
 			this.setState({ username: 'Hallowed Guest' });
+			formName.value = '';
 		}
 	};
 
