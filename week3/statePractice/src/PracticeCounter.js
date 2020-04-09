@@ -7,6 +7,7 @@ const Heading = (props) => {
 };
 
 const Button = (props) => {
+	// className needs to be set as a prop here, interesting...
 	return (
 		<button className={props.className} onClick={props.onClick}>
 			{props.buttonText}
