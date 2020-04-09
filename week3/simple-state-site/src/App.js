@@ -19,6 +19,14 @@ class App extends React.Component {
 		overlay.classList.add('hidden');
 	};
 
+	resetOverlay = () => {
+		const overlay = document.querySelector('.overlay');
+		if (overlay.classList.contains('hidden')) {
+			overlay.classList.remove('hidden');
+			this.setState({ username: 'Hallowed Guest' });
+		}
+	};
+
 	render() {
 		return (
 			<div className='App'>
@@ -26,6 +34,7 @@ class App extends React.Component {
 				<Content
 					loginCount={this.state.loginCount}
 					greeting={this.state.username}
+					visitAgain={this.resetOverlay}
 				/>
 				<Footer />
 			</div>
