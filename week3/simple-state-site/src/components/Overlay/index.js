@@ -1,7 +1,12 @@
 import React from 'react';
+import Form from '../Form';
 
 export default class Overlay extends React.Component {
 	render() {
-		return `I'm the overlay`;
+		return (
+			<div className='overlay'>
+				<Form className='form form--login' formSubmit={this.props.formSubmit} />
+			</div>
+		);
 	}
 }
