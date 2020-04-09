@@ -1,0 +1,32 @@
+.form {
+	background-color: #efefef;
+	border-radius: 5px;
+	color: black;
+	display: flex;
+	flex-direction: column;
+	height: 50vh;
+	justify-content: center;
+	padding: 40px;
+	width: 40%;
+}
+
+.form label {
+	font-size: 30px;
+}
+.form input {
+	margin: 10px auto 50px;
+	padding: 10px 20px;
+	width: 80%;
+}
+
+.form button {
+	align-items: center;
+	background-color: #ff2e63;
+	color: white;
+	display: flex;
+	font-size: 20px;
+	justify-content: center;
+	margin: 0 auto;
+	padding: 20px;
+	width: 80%;
+}
