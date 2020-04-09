@@ -1,4 +1,5 @@
 import React from 'react';
+import Button from '../Button';
 import './content.css';
 
 const Content = (props) => {
@@ -8,9 +9,12 @@ const Content = (props) => {
 			<h3>Hello, {greeting}!</h3>
 			<p className='count-msg'>You have visited {loginCount} times.</p>
 			<hr />
-			<button className='button button--again' onClick={visitAgain}>
-				Visit again?
-			</button>
+			<Button
+				buttonType='button'
+				className='button button--again'
+				buttonText='Visit again?'
+				onClick={visitAgain}
+			/>
 		</div>
 	);
 };
