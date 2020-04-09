@@ -6,7 +6,7 @@ import './App.css';
 
 class App extends React.Component {
 	state = {
-		username: '',
+		username: 'Hallowed Guest',
 		loginCount: 0,
 	};
 
@@ -14,19 +14,19 @@ class App extends React.Component {
 		event.preventDefault();
 		const name = document.querySelector('input[name]').value;
 		const overlay = document.querySelector('.overlay');
-		this.setState({ name: name });
+		this.setState({ username: name });
 		this.setState({ loginCount: this.state.loginCount + 1 });
 		overlay.classList.add('hidden');
 	};
 
-	greeting = () => {
-		return this.state.name ? this.state.name : 'Hallowed Guest';
-	};
 	render() {
 		return (
 			<div className='App'>
-				<Header formSubmit={this.submitName} greeting={this.greeting} />
-				<Content loginCount={this.state.loginCount} />
+				<Header formSubmit={this.submitName} />
+				<Content
+					loginCount={this.state.loginCount}
+					greeting={this.state.username}
+				/>
 				<Footer />
 			</div>
 		);
