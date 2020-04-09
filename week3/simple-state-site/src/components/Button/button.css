@@ -9,3 +9,7 @@ button {
 	padding: 20px;
 	width: 80%;
 }
+
+.button--again {
+	max-width: 300px;
+}
