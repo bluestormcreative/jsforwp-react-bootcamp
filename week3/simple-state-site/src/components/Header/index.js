@@ -6,7 +6,9 @@ export default class Header extends React.Component {
 		return (
 			<>
 				<Overlay formSubmit={this.props.formSubmit} />
-				<h2 className='site-title'>Simple State Site</h2>
+				<header className='site-header'>
+					<h2 className='site-title'>Simple State Site</h2>
+				</header>
 			</>
 		);
 	}

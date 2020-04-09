@@ -1,5 +1,6 @@
 import React from 'react';
 import Form from '../Form';
+import './overlay.css';
 
 export default class Overlay extends React.Component {
 	render() {
