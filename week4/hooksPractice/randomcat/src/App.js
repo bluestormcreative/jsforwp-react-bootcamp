@@ -8,8 +8,8 @@ function App() {
 	const fetchKitteh = () => {
 		fetch(url)
 			.then((response) => response.json())
-			.then((catPic) => {
-				setCatUrl(catPic[0]['url']);
+			.then((catData) => {
+				setCatUrl(catData[0]['url']);
 			})
 			.catch((error) => console.error(error));
 	};
