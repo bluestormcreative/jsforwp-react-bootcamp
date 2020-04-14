@@ -33,14 +33,12 @@ function App() {
 
 	return (
 		<div className='App'>
-			<>
-				{catUrl && (
-					<img className='kitteh' src={catUrl} alt='Pretty Kitty' />
-				)}
-				<button className='button' onClick={refreshCat}>
-					New Kitteh Pleez
-				</button>
-			</>
+			{catUrl && (
+				<img className='kitteh' src={catUrl} alt='Pretty Kitty' />
+			)}
+			<button className='button' onClick={refreshCat}>
+				New Kitteh Pleez
+			</button>
 		</div>
 	);
 }
