@@ -24,6 +24,13 @@ function App() {
 		}
 	});
 
+	useEffect(() => {
+		const timer = setInterval(() => {
+			fetchKitteh();
+		}, 5000);
+		return () => clearInterval(timer);
+	}, []);
+
 	return (
 		<div className='App'>
 			<>
