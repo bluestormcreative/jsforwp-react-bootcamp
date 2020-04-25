@@ -1,10 +1,16 @@
 import React, { Component } from 'react';
-import { BrowserRouter as Router, Switch, Route } from 'react-router-dom';
+import {
+	BrowserRouter as Router,
+	Switch,
+	Route,
+	Redirect,
+} from 'react-router-dom';
 import Header from './components/Header';
 import Posts from './components/Posts';
 import Post from './components/Post';
 import PostForm from './components/PostForm';
 import NotFound from './components/NotFound';
+import Messages from './components/Messages';
 import './App.css';
 
 class App extends Component {
@@ -29,16 +35,39 @@ class App extends Component {
 				content: 'Ipsum.',
 			},
 		],
+		messages: null,
+	};
+
+	getNewSlugFromTitle = (title) => {
+		encodeURIComponent(title.toLowerCase().split(' ').join('-'));
 	};
 
 	addNewPost = (post) => {
 		post.id = this.state.posts.length + 1;
-		post.slug = encodeURIComponent(
-			post.title.toLowerCase().split(' ').join('-')
-		);
+		post.slug = this.getNewSlugFromTitle(post.title);
 		this.setState({
 			posts: [...this.state.posts, post],
+			messages: 'saved',
 		});
+		setTimeout(() => {
+			this.setState({ messages: null });
+		}, 1600);
+	};
+
+	updatePost = (post) => {
+		post.slug = this.getNewSlugFromTitle(post.title);
+		const index = this.state.posts.findIndex((p) => p.id === post.id);
+		const posts = this.state.posts
+			.slice(0, index)
+			.concat(this.state.posts.slice(index + 1));
+		const newPosts = [...posts, post].sort((a, b) => a.id - b.id);
+		this.setState({
+			posts: newPosts,
+			messages: 'updated',
+		});
+		setTimeout(() => {
+			this.setState({ messages: null });
+		}, 1600);
 	};
 
 	render() {
@@ -46,6 +75,9 @@ class App extends Component {
 			<Router>
 				<div className='App'>
 					<Header />
+					{this.state.messages && (
+						<Messages type={this.state.messages} />
+					)}
 					<Switch>
 						<Route
 							exact
@@ -68,8 +100,36 @@ class App extends Component {
 							exact
 							path='/new'
 							render={() => (
-								<PostForm addNewPost={this.addNewPost} />
+								<PostForm
+									addNewPost={this.addNewPost}
+									post={{
+										id: 0,
+										slug: '',
+										title: '',
+										content: '',
+									}}
+								/>
 							)}
+						/>
+						<Route
+							path='/edit/:postSlug'
+							render={(props) => {
+								const post = this.state.posts.find(
+									(post) =>
+										post.slug ===
+										props.match.params.postSlug
+								);
+								if (post) {
+									return (
+										<PostForm
+											post={post}
+											updatePost={this.updatePost}
+										/>
+									);
+								} else {
+									return <Redirect to='/' />;
+								}
+							}}
 						/>
 						<Route component={NotFound} />
 					</Switch>
