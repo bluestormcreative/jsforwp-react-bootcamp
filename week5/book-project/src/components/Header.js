@@ -20,7 +20,9 @@ const Header = (props) => (
 							onClick={(event) => {
 								event.preventDefault();
 								props.onLogout();
-							}}></button>
+							}}>
+							Logout
+						</button>
 					</li>
 				</>
 			) : (
