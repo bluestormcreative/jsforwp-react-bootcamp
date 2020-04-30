@@ -10,9 +10,19 @@ const Header = (props) => (
 				<Link to='/'>Site Home</Link>
 			</li>
 			{props.isAuthenticated ? (
-				<li>
-					<Link to='/new'>New Post</Link>
-				</li>
+				<>
+					<li>
+						<Link to='/new'>New Post</Link>
+					</li>
+					<li>
+						<button
+							className='linkLike'
+							onClick={(event) => {
+								event.preventDefault();
+								props.onLogout();
+							}}></button>
+					</li>
+				</>
 			) : (
 				<li>
 					<Link to='/login'>Login</Link>

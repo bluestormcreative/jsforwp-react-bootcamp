@@ -50,6 +50,14 @@ class App extends Component {
 			.catch((error) => console.log(error));
 	};
 
+	onLogout = () => {
+		firebase
+			.auth()
+			.signOut()
+			.then(() => this.setState({ isAuthenticated: false }))
+			.catch((error) => console.log(error));
+	};
+
 	getNewSlugFromTitle = (title) =>
 		encodeURIComponent(title.toLowerCase().split(' ').join('-'));
 
@@ -96,7 +104,10 @@ class App extends Component {
 			<Router>
 				<div className='App'>
 					<SimpleStorage parent={this} />
-					<Header isAuthenticated={this.state.isAuthenticated} />
+					<Header
+						isAuthenticated={this.state.isAuthenticated}
+						onLogout={this.onLogout}
+					/>
 					{this.state.message && (
 						<Messages type={this.state.message} />
 					)}
