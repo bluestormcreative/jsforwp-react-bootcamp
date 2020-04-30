@@ -35,7 +35,7 @@ class App extends Component {
 				content: 'Ipsum.',
 			},
 		],
-		messages: null,
+		message: null,
 	};
 
 	getNewSlugFromTitle = (title) =>
@@ -46,10 +46,10 @@ class App extends Component {
 		post.slug = this.getNewSlugFromTitle(post.title);
 		this.setState({
 			posts: [...this.state.posts, post],
-			messages: 'saved',
+			message: 'saved',
 		});
 		setTimeout(() => {
-			this.setState({ messages: null });
+			this.setState({ message: null });
 		}, 1600);
 	};
 
@@ -62,11 +62,21 @@ class App extends Component {
 		const newPosts = [...posts, post].sort((a, b) => a.id - b.id);
 		this.setState({
 			posts: newPosts,
-			messages: 'updated',
+			message: 'updated',
 		});
 		setTimeout(() => {
-			this.setState({ messages: null });
+			this.setState({ message: null });
 		}, 1600);
+	};
+
+	deletePost = (post) => {
+		if (window.confirm('Delete this post?')) {
+			const posts = this.state.posts.filter((p) => p.id !== post.id);
+			this.setState({ posts, message: 'deleted' });
+			setTimeout(() => {
+				this.setState({ message: null });
+			}, 1600);
+		}
 	};
 
 	render() {
@@ -74,14 +84,19 @@ class App extends Component {
 			<Router>
 				<div className='App'>
 					<Header />
-					{this.state.messages && (
-						<Messages type={this.state.messages} />
+					{this.state.message && (
+						<Messages type={this.state.message} />
 					)}
 					<Switch>
 						<Route
 							exact
 							path='/'
-							render={() => <Posts posts={this.state.posts} />}
+							render={() => (
+								<Posts
+									posts={this.state.posts}
+									deletePost={this.deletePost}
+								/>
+							)}
 						/>
 						<Route
 							path='/post/:postSlug'

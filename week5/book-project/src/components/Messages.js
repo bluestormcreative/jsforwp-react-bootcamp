@@ -1,7 +1,7 @@
 import React from 'react';
 
 const Messages = ({ type }) => {
-	const messages = {
+	const message = {
 		saved: 'Post has been saved!',
 		updated: 'Post has been updated!',
 		deleted: 'Post has been deleted.',
@@ -10,7 +10,7 @@ const Messages = ({ type }) => {
 	return (
 		<div className={`App-message ${type}`}>
 			<p className='container'>
-				<strong>{messages[type]}</strong>
+				<strong>{message[type]}</strong>
 			</p>
 		</div>
 	);

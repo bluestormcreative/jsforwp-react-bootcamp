@@ -3,7 +3,7 @@ import { Link } from 'react-router-dom';
 
 // Destructure posts from props...
 // Functional component with implicit return...
-const Posts = ({ posts }) => (
+const Posts = ({ posts, deletePost }) => (
 	<article className='post container'>
 		<h1>Posts</h1>
 		<ul>
@@ -15,6 +15,12 @@ const Posts = ({ posts }) => (
 					</h2>
 					<p>
 						<Link to={`/edit/${post.slug}`}>Edit</Link>
+						{' | '}
+						<button
+							className='linkLike'
+							onClick={() => deletePost(post)}>
+							Delete
+						</button>
 					</p>
 				</li>
 			))}
