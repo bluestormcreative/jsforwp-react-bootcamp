@@ -5,6 +5,7 @@ import {
 	Route,
 	Redirect,
 } from 'react-router-dom';
+import SimpleStorage from 'react-simple-storage';
 import Header from './components/Header';
 import Posts from './components/Posts';
 import Post from './components/Post';
@@ -83,6 +84,7 @@ class App extends Component {
 		return (
 			<Router>
 				<div className='App'>
+					<SimpleStorage parent={this} />
 					<Header />
 					{this.state.message && (
 						<Messages type={this.state.message} />
