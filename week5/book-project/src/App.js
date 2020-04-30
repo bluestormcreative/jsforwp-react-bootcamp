@@ -6,12 +6,14 @@ import {
 	Redirect,
 } from 'react-router-dom';
 import SimpleStorage from 'react-simple-storage';
+import firebase from './firebase';
 import Header from './components/Header';
 import Posts from './components/Posts';
 import Post from './components/Post';
 import PostForm from './components/PostForm';
 import NotFound from './components/NotFound';
 import Messages from './components/Messages';
+import Login from './components/Login';
 import './App.css';
 
 class App extends Component {
@@ -37,6 +39,14 @@ class App extends Component {
 			},
 		],
 		message: null,
+	};
+
+	onLogin = (email, password) => {
+		firebase
+			.auth()
+			.signInWithEmailAndPassword(email, password)
+			.then((user) => console.log('Logged in'))
+			.catch((error) => console.log(error));
 	};
 
 	getNewSlugFromTitle = (title) =>
@@ -111,6 +121,11 @@ class App extends Component {
 								if (post) return <Post post={post} />;
 								else return <NotFound />;
 							}}
+						/>
+						<Route
+							exact
+							path='/login'
+							render={() => <Login onLogin={this.onLogin} />}
 						/>
 						<Route
 							exact
