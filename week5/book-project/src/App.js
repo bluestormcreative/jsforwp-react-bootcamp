@@ -127,22 +127,32 @@ class App extends Component {
 						<Route
 							exact
 							path='/login'
-							render={() => <Login onLogin={this.onLogin} />}
+							render={() =>
+								!this.state.isAuthenticated ? (
+									<Login onLogin={this.onLogin} />
+								) : (
+									<Redirect to='/' />
+								)
+							}
 						/>
 						<Route
 							exact
 							path='/new'
-							render={() => (
-								<PostForm
-									addNewPost={this.addNewPost}
-									post={{
-										id: 0,
-										slug: '',
-										title: '',
-										content: '',
-									}}
-								/>
-							)}
+							render={() =>
+								this.state.isAuthenticated ? (
+									<PostForm
+										addNewPost={this.addNewPost}
+										post={{
+											id: 0,
+											slug: '',
+											title: '',
+											content: '',
+										}}
+									/>
+								) : (
+									<Redirect to='/login' />
+								)
+							}
 						/>
 						<Route
 							path='/edit/:postSlug'
@@ -152,13 +162,18 @@ class App extends Component {
 										post.slug ===
 										props.match.params.postSlug
 								);
-								if (post) {
+								if (post && this.state.isAuthenticated) {
 									return (
 										<PostForm
 											post={post}
 											updatePost={this.updatePost}
 										/>
 									);
+								} else if (
+									post &&
+									!this.state.isAuthenticated
+								) {
+									return <Redirect to='/login' />;
 								} else {
 									return <Redirect to='/' />;
 								}
