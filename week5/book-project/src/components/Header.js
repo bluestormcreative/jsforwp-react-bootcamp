@@ -9,12 +9,15 @@ const Header = (props) => (
 			<li key='home'>
 				<Link to='/'>Site Home</Link>
 			</li>
-			<li>
-				<Link to='/new'>New Post</Link>
-			</li>
-			<li>
-				<Link to='/login'>Login</Link>
-			</li>
+			{props.isAuthenticated ? (
+				<li>
+					<Link to='/new'>New Post</Link>
+				</li>
+			) : (
+				<li>
+					<Link to='/login'>Login</Link>
+				</li>
+			)}
 		</ul>
 	</header>
 );

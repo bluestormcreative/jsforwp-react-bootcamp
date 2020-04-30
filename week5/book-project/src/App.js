@@ -18,6 +18,7 @@ import './App.css';
 
 class App extends Component {
 	state = {
+		isAuthenticated: false,
 		posts: [
 			{
 				id: 1,
@@ -45,7 +46,7 @@ class App extends Component {
 		firebase
 			.auth()
 			.signInWithEmailAndPassword(email, password)
-			.then((user) => console.log('Logged in'))
+			.then((user) => this.setState({ isAuthenticated: true }))
 			.catch((error) => console.log(error));
 	};
 
@@ -95,7 +96,7 @@ class App extends Component {
 			<Router>
 				<div className='App'>
 					<SimpleStorage parent={this} />
-					<Header />
+					<Header isAuthenticated={this.state.isAuthenticated} />
 					{this.state.message && (
 						<Messages type={this.state.message} />
 					)}
@@ -105,6 +106,7 @@ class App extends Component {
 							path='/'
 							render={() => (
 								<Posts
+									isAuthenticated={this.state.isAuthenticated}
 									posts={this.state.posts}
 									deletePost={this.deletePost}
 								/>
