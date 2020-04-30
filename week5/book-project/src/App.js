@@ -38,9 +38,8 @@ class App extends Component {
 		messages: null,
 	};
 
-	getNewSlugFromTitle = (title) => {
+	getNewSlugFromTitle = (title) =>
 		encodeURIComponent(title.toLowerCase().split(' ').join('-'));
-	};
 
 	addNewPost = (post) => {
 		post.id = this.state.posts.length + 1;
