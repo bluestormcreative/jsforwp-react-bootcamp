@@ -62,10 +62,11 @@ class App extends Component {
 		encodeURIComponent(title.toLowerCase().split(' ').join('-'));
 
 	addNewPost = (post) => {
-		post.id = this.state.posts.length + 1;
+		const postsRef = firebase.database().ref('posts'); // Get the posts dataset.
 		post.slug = this.getNewSlugFromTitle(post.title);
+		delete post.key; // Delete the null post default key.
+		postsRef.push(post); // Push the new post to the database.
 		this.setState({
-			posts: [...this.state.posts, post],
 			message: 'saved',
 		});
 		setTimeout(() => {
@@ -98,6 +99,23 @@ class App extends Component {
 			}, 1600);
 		}
 	};
+
+	componentDidMount() {
+		const postsRef = firebase.database().ref('posts');
+		postsRef.on('value', (snapshot) => {
+			const posts = snapshot.val();
+			const newStatePosts = [];
+			for (let post in posts) {
+				newStatePosts.push({
+					key: post,
+					slug: posts[post].slug,
+					title: posts[post].title,
+					content: posts[post].content,
+				});
+			}
+			this.setState({ posts: newStatePosts });
+		});
+	}
 
 	render() {
 		return (
