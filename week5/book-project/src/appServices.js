@@ -6,7 +6,7 @@ export default new (class AppService {
 	}
 
 	logout() {
-		return firebase.auth.signout();
+		return firebase.auth().signOut();
 	}
 
 	subscribeToPosts(callback) {
