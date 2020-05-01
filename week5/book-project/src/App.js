@@ -60,6 +60,14 @@ class App extends Component {
 		}
 	};
 
+	renderAuthRoute(Component, props) {
+		if (this.state.isAuthenticated) {
+			return <Component {...props} />;
+		} else {
+			return <Redirect to='/' />;
+		}
+	}
+
 	componentDidMount() {
 		this.props.appService.subscribeToPosts((posts) =>
 			this.setState({ posts })
@@ -117,19 +125,15 @@ class App extends Component {
 							exact
 							path='/new'
 							render={() =>
-								this.state.isAuthenticated ? (
-									<PostForm
-										addNewPost={this.addNewPost}
-										post={{
-											key: null,
-											slug: '',
-											title: '',
-											content: '',
-										}}
-									/>
-								) : (
-									<Redirect to='/login' />
-								)
+								this.renderAuthRoute(PostForm, {
+									addNewPost: this.addNewPost,
+									post: {
+										key: null,
+										slug: '',
+										title: '',
+										content: '',
+									},
+								})
 							}
 						/>
 						<Route
@@ -140,18 +144,11 @@ class App extends Component {
 										post.slug ===
 										props.match.params.postSlug
 								);
-								if (post && this.state.isAuthenticated) {
-									return (
-										<PostForm
-											post={post}
-											updatePost={this.updatePost}
-										/>
-									);
-								} else if (
-									post &&
-									!this.state.isAuthenticated
-								) {
-									return <Redirect to='/login' />;
+								if (post) {
+									return this.renderAuthRoute(PostForm, {
+										updatePost: this.updatePost,
+										post,
+									});
 								} else {
 									return <Redirect to='/' />;
 								}
