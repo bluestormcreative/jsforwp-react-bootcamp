@@ -75,14 +75,14 @@ class App extends Component {
 	};
 
 	updatePost = (post) => {
-		post.slug = this.getNewSlugFromTitle(post.title);
-		const index = this.state.posts.findIndex((p) => p.id === post.id);
-		const posts = this.state.posts
-			.slice(0, index)
-			.concat(this.state.posts.slice(index + 1));
-		const newPosts = [...posts, post].sort((a, b) => a.id - b.id);
+		const postRef = firebase.database().ref('posts/' + post.key);
+		postRef.update({
+			// Update method from Firebase.
+			slug: this.getNewSlugFromTitle(post.title),
+			title: post.title,
+			content: post.content,
+		});
 		this.setState({
-			posts: newPosts,
 			message: 'updated',
 		});
 		setTimeout(() => {
@@ -92,8 +92,9 @@ class App extends Component {
 
 	deletePost = (post) => {
 		if (window.confirm('Delete this post?')) {
-			const posts = this.state.posts.filter((p) => p.id !== post.id);
-			this.setState({ posts, message: 'deleted' });
+			const postRef = firebase.database().ref('posts/' + post.key);
+			postRef.remove();
+			this.setState({ message: 'deleted' });
 			setTimeout(() => {
 				this.setState({ message: null });
 			}, 1600);
