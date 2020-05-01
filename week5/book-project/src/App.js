@@ -39,6 +39,13 @@ class App extends Component {
 			.catch((error) => console.log(error));
 	};
 
+	displayMessage = (type) => {
+		this.setState({ message: type });
+		setTimeout(() => {
+			this.setState({ message: null });
+		}, 1600);
+	};
+
 	getNewSlugFromTitle = (title) =>
 		encodeURIComponent(title.toLowerCase().split(' ').join('-'));
 
@@ -47,12 +54,7 @@ class App extends Component {
 		post.slug = this.getNewSlugFromTitle(post.title);
 		delete post.key; // Delete the null post default key.
 		postsRef.push(post); // Push the new post to the database.
-		this.setState({
-			message: 'saved',
-		});
-		setTimeout(() => {
-			this.setState({ message: null });
-		}, 1600);
+		this.displayMessage('saved');
 	};
 
 	updatePost = (post) => {
@@ -63,22 +65,14 @@ class App extends Component {
 			title: post.title,
 			content: post.content,
 		});
-		this.setState({
-			message: 'updated',
-		});
-		setTimeout(() => {
-			this.setState({ message: null });
-		}, 1600);
+		this.displayMessage('updated');
 	};
 
 	deletePost = (post) => {
 		if (window.confirm('Delete this post?')) {
 			const postRef = firebase.database().ref('posts/' + post.key);
 			postRef.remove();
-			this.setState({ message: 'deleted' });
-			setTimeout(() => {
-				this.setState({ message: null });
-			}, 1600);
+			this.displayMessage('deleted');
 		}
 	};
 
