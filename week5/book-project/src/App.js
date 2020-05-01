@@ -154,7 +154,7 @@ class App extends Component {
 									<PostForm
 										addNewPost={this.addNewPost}
 										post={{
-											id: 0,
+											key: null,
 											slug: '',
 											title: '',
 											content: '',
