@@ -19,26 +19,7 @@ import './App.css';
 class App extends Component {
 	state = {
 		isAuthenticated: false,
-		posts: [
-			{
-				id: 1,
-				slug: 'hello-react',
-				title: 'Hello React',
-				content: 'Lorem.',
-			},
-			{
-				id: 2,
-				slug: 'hello-project',
-				title: 'Hello Project',
-				content: 'Tothe.',
-			},
-			{
-				id: 3,
-				slug: 'hello-blog',
-				title: 'Hello Blog',
-				content: 'Ipsum.',
-			},
-		],
+		posts: [],
 		message: null,
 	};
 
