@@ -6,7 +6,6 @@ import {
 	Redirect,
 } from 'react-router-dom';
 import SimpleStorage from 'react-simple-storage';
-import firebase from './firebase';
 import Header from './components/Header';
 import Posts from './components/Posts';
 import Post from './components/Post';
@@ -24,17 +23,15 @@ class App extends Component {
 	};
 
 	onLogin = (email, password) => {
-		firebase
-			.auth()
-			.signInWithEmailAndPassword(email, password)
+		this.props.appService
+			.login(email, password)
 			.then((user) => this.setState({ isAuthenticated: true }))
 			.catch((error) => console.log(error));
 	};
 
 	onLogout = () => {
-		firebase
-			.auth()
-			.signOut()
+		this.props.appService
+			.logout()
 			.then(() => this.setState({ isAuthenticated: false }))
 			.catch((error) => console.log(error));
 	};
@@ -46,51 +43,27 @@ class App extends Component {
 		}, 1600);
 	};
 
-	getNewSlugFromTitle = (title) =>
-		encodeURIComponent(title.toLowerCase().split(' ').join('-'));
-
 	addNewPost = (post) => {
-		const postsRef = firebase.database().ref('posts'); // Get the posts dataset.
-		post.slug = this.getNewSlugFromTitle(post.title);
-		delete post.key; // Delete the null post default key.
-		postsRef.push(post); // Push the new post to the database.
+		this.props.appService.savePost(post);
 		this.displayMessage('saved');
 	};
 
 	updatePost = (post) => {
-		const postRef = firebase.database().ref('posts/' + post.key);
-		postRef.update({
-			// Update method from Firebase.
-			slug: this.getNewSlugFromTitle(post.title),
-			title: post.title,
-			content: post.content,
-		});
+		this.props.appService.updatePost(post);
 		this.displayMessage('updated');
 	};
 
 	deletePost = (post) => {
 		if (window.confirm('Delete this post?')) {
-			const postRef = firebase.database().ref('posts/' + post.key);
-			postRef.remove();
+			this.props.appService.deletePost(post);
 			this.displayMessage('deleted');
 		}
 	};
 
 	componentDidMount() {
-		const postsRef = firebase.database().ref('posts');
-		postsRef.on('value', (snapshot) => {
-			const posts = snapshot.val();
-			const newStatePosts = [];
-			for (let post in posts) {
-				newStatePosts.push({
-					key: post,
-					slug: posts[post].slug,
-					title: posts[post].title,
-					content: posts[post].content,
-				});
-			}
-			this.setState({ posts: newStatePosts });
-		});
+		this.props.appService.subscribeToPosts((posts) =>
+			this.setState({ posts })
+		);
 	}
 
 	render() {
