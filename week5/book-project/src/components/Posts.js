@@ -9,7 +9,7 @@ const Posts = ({ posts, deletePost, isAuthenticated }) => (
 		<ul>
 			{posts.length < 1 && <li key='empty'>No Posts Yet!</li>}
 			{posts.map((post) => (
-				<li key={post.id}>
+				<li key={post.key}>
 					<h2>
 						<Link to={`/post/${post.slug}`}>{post.title}</Link>
 					</h2>
