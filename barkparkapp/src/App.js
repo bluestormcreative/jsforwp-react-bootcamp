@@ -22,7 +22,7 @@ class App extends Component {
 			reservedSlots: [],
 			availSlots: 3,
 		},
-		isAuthenticated: false,
+		isAuthenticated: true,
 	};
 
 	onLogin = (userEmail, userPass) => {
@@ -107,6 +107,22 @@ class App extends Component {
 		}
 	};
 
+	handleSelectEvent = (event) => {
+		if (window.confirm('Delete this event?')) {
+			const updatedEvents = this.state.events.filter(
+				(ev) => ev.slotID !== event.slotID
+			);
+
+			this.setState({
+				events: updatedEvents,
+				userData: {
+					...this.state.userData,
+					reservedSlots: [...updatedEvents],
+				},
+			});
+		}
+	};
+
 	render() {
 		const remainingSlots =
 			this.state.userData.availSlots -
@@ -170,6 +186,7 @@ class App extends Component {
 							views={['week']}
 							min={moment('06:00am', 'h:mma').toDate()}
 							max={moment('09:00pm', 'h:mma').toDate()}
+							onSelectEvent={this.handleSelectEvent}
 						/>
 					</div>
 				)}
