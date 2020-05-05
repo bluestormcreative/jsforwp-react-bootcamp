@@ -20,11 +20,16 @@ class App extends Component {
 				'Lucy',
 			],
 			reservedSlots: [],
-			availSlots: 2,
+			availSlots: 3,
 		},
 	};
 
 	handleSelect = ({ slots, start, end }) => { // Destructured from slotInfo.
+		const {
+			events,
+			userData,
+		} = this.state;
+
 		const now = new Date();
 
 		// Return if the timeslot is past.
@@ -40,21 +45,21 @@ class App extends Component {
 		}
 
 		// Return if user has already reserved all their available slots.
-		if (this.state.userData.reservedSlots.length > this.state.userData.availSlots - 1 ) {
-			alert(`Sorry, you've already reserved ${this.state.userData.availSlots} timeslots this week!`);
+		if (userData.reservedSlots.length > userData.availSlots - 1 ) {
+			alert(`Sorry, you've already reserved ${userData.availSlots} timeslots this week!`);
 			return;
 		}
 
 		// Temp title info - the conditional will be a bool in final v.
-		const title = `${this.state.userData.userName} & ${this.state.userData.petNames[0]}`;
+		const title = `${userData.userName} & ${userData.petNames[0]}`;
 
 		if (title) {
 			const slotID = uuidv4();
 			this.setState({
 				userData: {
-					...this.state.userData,
+					...userData,
 					reservedSlots: [
-						...this.state.userData.reservedSlots,
+						...userData.reservedSlots,
 						{
 							start,
 							end,
@@ -66,7 +71,7 @@ class App extends Component {
 			});
 			this.setState({
 				events: [
-					...this.state.events,
+					...events,
 					{
 						start,
 						end,
