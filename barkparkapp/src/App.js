@@ -34,6 +34,7 @@ class App extends Component {
 
 		// Return if the timeslot is past.
 		if (start.getTime() < now.getTime()) {
+			alert("That time has past!");
 			return;
 		}
 
