@@ -21,8 +21,12 @@ class App extends Component {
 		},
 	};
 
-	handleSelect = ({ slots, start, end }) => {
-		console.log(this.state.userData.reservedSlots.length); // eslint-disable-line no-console
+	handleSelect = ({ slots, start, end }) => { // Destructured from slotInfo.
+		const now = new Date();
+
+		if (start.getTime() < now.getTime()) {
+			return;
+		}
 
 		if (slots.length > 2) {
 			alert("Sorry, only 30 minute slots allowed!");
@@ -34,8 +38,9 @@ class App extends Component {
 			return;
 		}
 
-		const title = `${this.state.userData.userName} & ${this.state.userData.petNames[0]}`; // This can be the username by default.
-		// Then just a click "Yes" or "Cancel", then if "Yes"...
+		// Temp title info - the conditional will be a bool in final v.
+		const title = `${this.state.userData.userName} & ${this.state.userData.petNames[0]}`;
+
 		if (title) {
 			const slotID = uuidv4();
 			this.setState({
