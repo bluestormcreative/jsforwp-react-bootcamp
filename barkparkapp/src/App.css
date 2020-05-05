@@ -3,8 +3,34 @@
 }
 
 .calendar__container {
-  margin: 100px auto;
+  margin: 60px auto 160px;
   max-width: 80%;
   min-width: 400px;
-  height: 80vh;
+  height: 100vh;
+}
+
+.rbc-timeslot-group {
+  border-bottom: none;
+  min-height: 80px;
+}
+
+.rbc-time-column .rbc-timeslot-group {
+  border-bottom: 1px solid #ddd;
+}
+
+.rbc-day-slot .rbc-time-slot {
+  border-top-color: #ddd
+}
+
+.rbc-day-slot .rbc-events-container {
+  margin-right: 3px;
+}
+
+.rbc-day-slot .rbc-event-label {
+  margin-bottom: 3px;
+}
+
+.rbc-day-slot .rbc-event-content {
+  font-size: 14px;
+  font-weight: bold;
 }
