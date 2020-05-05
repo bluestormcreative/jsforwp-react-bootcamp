@@ -71,7 +71,6 @@ class App extends Component {
 						defaultView="week"
 						events={this.state.events}
 						onSelectSlot={this.handleSelect}
-						style={{ height: "100vh" }}
 						selectable
 						step={30}
 						showMultiDayTimes
