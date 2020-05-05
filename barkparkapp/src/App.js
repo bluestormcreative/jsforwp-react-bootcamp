@@ -38,6 +38,18 @@ class App extends Component {
 			return;
 		}
 
+		// TODO: return if timeslot is taken by someone else, edit if reserved by current user.
+		//
+		// Return if timeslot is already taken.
+		// const takenSlots = events.map((event) => {
+		// 	let startTime = event.start.getTime();
+		// 	return startTime;
+		// });
+		// if (takenSlots.includes(start.getTime())) {
+		// 	alert("That time is already reserved! Please choose another timeslot.");
+		// 	return;
+		// }
+
 		// Return if the user tries to select a longer timeslot.
 		// TODO try to disable select by drag so we don't need this...
 		if (slots.length > 2) {
