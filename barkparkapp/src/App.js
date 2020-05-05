@@ -1,6 +1,6 @@
 import React, { Component } from 'react';
-import SimpleStorage from 'react-simple-storage';
 import firebase from './firebase';
+// import SimpleStorage from 'react-simple-storage';
 import Login from './components/Login';
 import { Calendar, momentLocalizer } from 'react-big-calendar';
 import moment from 'moment';
@@ -38,9 +38,11 @@ class App extends Component {
 		const { events, userData } = this.state;
 
 		const now = new Date();
+		const startTime = new Date(start);
+		const endTime = new Date(end);
 
 		// Return if the timeslot is past.
-		if (start.getTime() < now.getTime()) {
+		if (startTime.getTime() < now.getTime()) {
 			alert(`That time has past!`);
 			return;
 		}
@@ -83,8 +85,8 @@ class App extends Component {
 					reservedSlots: [
 						...userData.reservedSlots,
 						{
-							start,
-							end,
+							start: startTime,
+							end: endTime,
 							title,
 							slotID,
 						},
@@ -95,8 +97,8 @@ class App extends Component {
 				events: [
 					...events,
 					{
-						start,
-						end,
+						start: startTime,
+						end: endTime,
 						title,
 						slotID,
 					},
@@ -110,12 +112,12 @@ class App extends Component {
 			this.state.userData.availSlots -
 			this.state.userData.reservedSlots.length;
 
-		let currentSlots = this.state.userData.reservedSlots.map((obj) => {
+		let currentSlots = this.state.userData.reservedSlots.map((obj, i) => {
 			const dayDate = moment(obj.start).format('ddd MMM Do');
 			const startTime = moment(obj.start).format('h:mma');
 			const endTime = moment(obj.end).format('h:mma');
 			return (
-				<li>
+				<li key={i}>
 					<span>{dayDate}:</span>
 					<span>
 						{startTime} - {endTime}
@@ -134,7 +136,7 @@ class App extends Component {
 
 		return (
 			<div className='App'>
-				<SimpleStorage parent={this} />
+				{/* <SimpleStorage parent={this} /> */}
 				{!this.state.isAuthenticated && (
 					<Login onLogin={this.onLogin} />
 				)}
@@ -152,10 +154,8 @@ class App extends Component {
 							</div>
 							<div>
 								<p>Slots available: {remainingSlots}</p>
-								<p>
-									Your reserved timeslots:
-									<ul>{currentSlots}</ul>
-								</p>
+								<p>Your reserved timeslots:</p>
+								<ul>{currentSlots}</ul>
 							</div>
 						</div>
 						<Calendar
