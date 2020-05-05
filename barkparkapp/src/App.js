@@ -99,9 +99,9 @@ class App extends Component {
 	render() {
 		const remainingSlots = this.state.userData.availSlots - this.state.userData.reservedSlots.length;
 		let currentSlots = this.state.userData.reservedSlots.map((obj) => {
-			let dayDate = moment(obj.start).format('ddd MMM Do');
-			let startTime = moment(obj.start).format('h:mma');
-			let endTime = moment(obj.end).format('h:mma');
+			const dayDate = moment(obj.start).format('ddd MMM Do');
+			const startTime = moment(obj.start).format('h:mma');
+			const endTime = moment(obj.end).format('h:mma');
 			return <li><span>{dayDate}:</span><span>{startTime} - {endTime}</span></li>;
 		});
 
