@@ -22,7 +22,7 @@ class App extends Component {
 			reservedSlots: [],
 			availSlots: 3,
 		},
-		isAuthenticated: true,
+		isAuthenticated: false,
 	};
 
 	onLogin = (userEmail, userPass) => {
@@ -33,77 +33,68 @@ class App extends Component {
 			.catch((error) => console.error(error));
 	};
 
-	handleSelect = ({ slots, start, end }) => {
-		// Destructured from slotInfo.
-		const { events, userData } = this.state;
-
+	checkIfEventCanBeCreated = (slots, start, reserved, avail) => {
 		const now = new Date();
-		const startTime = new Date(start);
-		const endTime = new Date(end);
 
 		// Return if the timeslot is past.
-		if (startTime.getTime() < now.getTime()) {
+		if (start.getTime() < now.getTime()) {
 			alert(`That time has past!`);
-			return;
+			return false;
 		}
-
-		// TODO: return if timeslot is taken by someone else, edit if reserved by current user.
-		//
-		// Return if timeslot is already taken.
-		// const takenSlots = events.map((event) => {
-		// 	let startTime = event.start.getTime();
-		// 	return startTime;
-		// });
-		// if (takenSlots.includes(start.getTime())) {
-		// 	alert("That time is already reserved! Please choose another timeslot.");
-		// 	return;
-		// }
 
 		// Return if the user tries to select a longer timeslot.
 		// TODO try to disable select by drag so we don't need this...
 		if (slots.length > 2) {
 			alert(`Sorry, only 30 minute slots allowed!`);
-			return;
+			return false;
 		}
 
 		// Return if user has already reserved all their available slots.
-		if (userData.reservedSlots.length > userData.availSlots - 1) {
+		if (reserved.length > avail - 1) {
 			alert(
-				`Sorry, you've already reserved ${userData.availSlots} timeslots this week!`
+				`Sorry, you've already reserved ${avail} timeslots this week!`
 			);
 			return;
 		}
 
-		// Temp title info - the conditional will be a bool in final v.
-		const title = `${userData.userName} & ${userData.petNames[0]}`;
+		return true;
+	};
 
-		if (title) {
+	handleNewEvent = ({ slots, start, end }) => {
+		// Destructured from slotInfo.
+		const { userData } = this.state;
+
+		console.log(start); // eslint-disable-line no-console
+		console.log(end); // eslint-disable-line no-console
+
+		const canCreateEvent = this.checkIfEventCanBeCreated(
+			slots,
+			start,
+			userData.reservedSlots,
+			userData.availSlots
+		);
+
+		const wantCreateEvent = true; // TODO Update this with user confirmation modal.
+
+		if (canCreateEvent && wantCreateEvent) {
+			const title = `${userData.userName} & ${userData.petNames[0]}`;
 			const slotID = uuidv4();
+			const newEvent = {
+				key: null,
+				start: start.toString(),
+				end: end.toString(),
+				title,
+				slotID,
+			};
 			this.setState({
 				userData: {
 					...userData,
-					reservedSlots: [
-						...userData.reservedSlots,
-						{
-							start: startTime,
-							end: endTime,
-							title,
-							slotID,
-						},
-					],
+					reservedSlots: [...userData.reservedSlots, newEvent],
 				},
 			});
-			this.setState({
-				events: [
-					...events,
-					{
-						start: startTime,
-						end: endTime,
-						title,
-						slotID,
-					},
-				],
-			});
+			const eventsRef = firebase.database().ref('events');
+			delete newEvent.key;
+			eventsRef.push(newEvent);
 		}
 	};
 
@@ -122,6 +113,24 @@ class App extends Component {
 			});
 		}
 	};
+
+	componentDidMount() {
+		const eventsRef = firebase.database().ref('events');
+		eventsRef.on('value', (snapshot) => {
+			const events = snapshot.val();
+			const newStateEvents = [];
+			for (let event in events) {
+				newStateEvents.push({
+					key: event,
+					start: new Date(events[event].start),
+					end: new Date(events[event].end),
+					title: events[event].title,
+					slotID: events[event].slotID,
+				});
+			}
+			this.setState({ events: newStateEvents });
+		});
+	}
 
 	render() {
 		const remainingSlots =
@@ -179,7 +188,7 @@ class App extends Component {
 							defaultDate={new Date()}
 							defaultView='week'
 							events={this.state.events}
-							onSelectSlot={this.handleSelect}
+							onSelectSlot={this.handleNewEvent}
 							selectable
 							step={30}
 							showMultiDayTimes
