@@ -64,9 +64,6 @@ class App extends Component {
 		// Destructured from slotInfo.
 		const { userData } = this.state;
 
-		console.log(start); // eslint-disable-line no-console
-		console.log(end); // eslint-disable-line no-console
-
 		const canCreateEvent = this.checkIfEventCanBeCreated(
 			slots,
 			start,
@@ -92,6 +89,7 @@ class App extends Component {
 					reservedSlots: [...userData.reservedSlots, newEvent],
 				},
 			});
+
 			const eventsRef = firebase.database().ref('events');
 			delete newEvent.key;
 			eventsRef.push(newEvent);
@@ -100,17 +98,8 @@ class App extends Component {
 
 	handleSelectEvent = (event) => {
 		if (window.confirm('Delete this event?')) {
-			const updatedEvents = this.state.events.filter(
-				(ev) => ev.slotID !== event.slotID
-			);
-
-			this.setState({
-				events: updatedEvents,
-				userData: {
-					...this.state.userData,
-					reservedSlots: [...updatedEvents],
-				},
-			});
+			const eventRef = firebase.database().ref('events/' + event.key);
+			eventRef.remove();
 		}
 	};
 
