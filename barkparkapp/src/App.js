@@ -1,6 +1,7 @@
 import React, { Component } from 'react';
 import { Calendar, momentLocalizer } from "react-big-calendar";
 import moment from 'moment';
+import { v4 as uuidv4 } from 'uuid';
 import 'react-big-calendar/lib/css/react-big-calendar.css';
 import './App.css';
 
@@ -35,15 +36,19 @@ class App extends Component {
 
 		const title = `${this.state.userData.userName} & ${this.state.userData.petNames[0]}`; // This can be the username by default.
 		// Then just a click "Yes" or "Cancel", then if "Yes"...
-		if (title)
+		if (title) {
+			const slotID = uuidv4();
 			this.setState({
 				userData: {
 					...this.state.userData,
 					reservedSlots: [
 						...this.state.userData.reservedSlots,
-						{start,
-						end,
-						title,},
+						{
+							start,
+							end,
+							title,
+							slotID
+						},
 					],
 				},
 			});
@@ -54,9 +59,11 @@ class App extends Component {
 						start,
 						end,
 						title,
+						slotID
 					},
 				],
 			});
+		}
 	}
 
 	render() {
