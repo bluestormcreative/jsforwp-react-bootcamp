@@ -118,6 +118,12 @@ class App extends Component {
 				});
 			}
 			this.setState({ events: newStateEvents });
+			this.setState({
+				userData: {
+					...this.state.userData,
+					reservedSlots: [...newStateEvents],
+				},
+			});
 		});
 	}
 
