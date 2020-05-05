@@ -34,3 +34,18 @@
   font-size: 14px;
   font-weight: bold;
 }
+
+.rbc-toolbar {
+  margin-bottom: 0;
+}
+
+.rbc-toolbar .rbc-btn-group {
+  display: none;
+}
+
+.rbc-toolbar .rbc-toolbar-label {
+  background-color: rgba(18, 93, 158, 0.7);
+  color: white;
+  font-weight: bold;
+  padding: 10px;
+}

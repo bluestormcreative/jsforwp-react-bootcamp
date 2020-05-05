@@ -81,7 +81,7 @@ class App extends Component {
 						selectable
 						step={30}
 						showMultiDayTimes
-						views={['week', 'day']}
+						views={['week']}
 						min={moment('06:00am', 'h:mma').toDate()}
 						max={moment('09:00pm', 'h:mma').toDate()}
 					/>
