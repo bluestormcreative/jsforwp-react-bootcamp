@@ -12,29 +12,36 @@ class App extends Component {
 		events: [],
 		userData: {
 			id: 489,
+			userName: 'Mo',
+			userEmail: 'mo@twobigdogs.us',
+			userPhone: '665-567-7890',
 			petNames: [
 				'Leo',
 				'Lucy',
 			],
-			userName: 'Mo',
 			reservedSlots: [],
+			availSlots: 2,
 		},
 	};
 
 	handleSelect = ({ slots, start, end }) => { // Destructured from slotInfo.
 		const now = new Date();
 
+		// Return if the timeslot is past.
 		if (start.getTime() < now.getTime()) {
 			return;
 		}
 
+		// Return if the user tries to select a longer timeslot.
+		// TODO try to disable select by drag so we don't need this...
 		if (slots.length > 2) {
 			alert("Sorry, only 30 minute slots allowed!");
 			return;
 		}
 
-		if (this.state.userData.reservedSlots.length > 2 ) {
-			alert("Sorry, you've already reserved 3 timeslots this week!");
+		// Return if user has already reserved all their available slots.
+		if (this.state.userData.reservedSlots.length > this.state.userData.availSlots - 1 ) {
+			alert(`Sorry, you've already reserved ${this.state.userData.availSlots} timeslots this week!`);
 			return;
 		}
 
