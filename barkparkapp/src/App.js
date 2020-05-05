@@ -34,7 +34,7 @@ class App extends Component {
 
 		// Return if the timeslot is past.
 		if (start.getTime() < now.getTime()) {
-			alert("That time has past!");
+			alert(`That time has past!`);
 			return;
 		}
 
@@ -53,7 +53,7 @@ class App extends Component {
 		// Return if the user tries to select a longer timeslot.
 		// TODO try to disable select by drag so we don't need this...
 		if (slots.length > 2) {
-			alert("Sorry, only 30 minute slots allowed!");
+			alert(`Sorry, only 30 minute slots allowed!`);
 			return;
 		}
 
@@ -97,11 +97,35 @@ class App extends Component {
 	}
 
 	render() {
+		const remainingSlots = this.state.userData.availSlots - this.state.userData.reservedSlots.length;
+		let currentSlots = this.state.userData.reservedSlots.map((obj) => {
+			let dayDate = moment(obj.start).format('ddd MMM Do');
+			let startTime = moment(obj.start).format('h:mma');
+			let endTime = moment(obj.end).format('h:mma');
+			return <li><span>{dayDate}:</span><span>{startTime} - {endTime}</span></li>;
+		});
+
+		if (currentSlots.length === 0 ) {
+			currentSlots = <li className='no-slots'>You haven't reserved any timeslots yet!</li>;
+		}
+
 		return (
 			<div className="App">
 				<div className="calendar__container">
-					<h2 className="calendar__heading">Bark Park Calendar</h2>
-					<p className="calendar__description">Click on a 30min timeslot to reserve your spot!</p>
+					<div className="calendar__header">
+						<div>
+							<h2 className="calendar__heading">Bark Park Calendar</h2>
+							<p className="calendar__description">Click on a 30min timeslot to reserve your spot!</p>
+						</div>
+						<div>
+							<p>Slots available: {remainingSlots}</p>
+							<p>Your reserved timeslots:
+								<ul>
+										{currentSlots}
+								</ul>
+							</p>
+						</div>
+					</div>
 					<Calendar
 						localizer={localizer}
 						defaultDate={new Date()}

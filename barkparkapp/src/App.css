@@ -9,6 +9,38 @@
   height: 100vh;
 }
 
+.calendar__header {
+  display: flex;
+  justify-content: space-between;
+}
+
+.calendar__header div:last-of-type {
+  padding-right: 30px;
+}
+
+.calendar__container ul {
+  margin: 5px 0 0 20px;
+  min-height: 60px;
+  padding: 0;
+}
+
+.calendar__container ul li {
+  display: flex;
+  list-style-type: none;
+  margin: 0;
+  padding: 0;
+  justify-content: space-between;
+}
+
+.calendar__container ul li span {
+  display: inline-block;
+  padding-right: 5px;
+}
+
+.no-slots {
+  font-size: 12px;
+}
+
 .rbc-timeslot-group {
   border-bottom: none;
   min-height: 80px;
