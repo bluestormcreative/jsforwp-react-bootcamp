@@ -1,4 +1,5 @@
 import React, { Component } from 'react';
+import SimpleStorage from 'react-simple-storage';
 import firebase from './firebase';
 import Login from './components/Login';
 import { Calendar, momentLocalizer } from 'react-big-calendar';
@@ -133,6 +134,7 @@ class App extends Component {
 
 		return (
 			<div className='App'>
+				<SimpleStorage parent={this} />
 				{!this.state.isAuthenticated && (
 					<Login onLogin={this.onLogin} />
 				)}
