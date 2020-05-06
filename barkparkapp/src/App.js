@@ -164,11 +164,12 @@ class App extends Component {
 			this.state.userData.reservedSlots.length;
 
 		let currentSlots = this.state.userData.reservedSlots.map((obj, i) => {
-			const dayDate = moment(obj.start).format('ddd MMM Do');
-			const startTime = moment(obj.start).format('h:mma');
+			const upcoming = moment(obj.start);
+			const dayDate = upcoming.format('ddd MMM Do');
+			const startTime = upcoming.format('h:mma');
 			const endTime = moment(obj.end).format('h:mma');
 			return (
-				<li key={i}>
+				<li key={upcoming}>
 					<span>{dayDate}:</span>
 					<span>
 						{startTime} - {endTime}
@@ -183,6 +184,8 @@ class App extends Component {
 					You haven't reserved any timeslots yet!
 				</li>
 			);
+		} else {
+			currentSlots.sort((a, b) => a.key - b.key);
 		}
 
 		return (
