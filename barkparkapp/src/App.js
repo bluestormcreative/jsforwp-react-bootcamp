@@ -41,6 +41,11 @@ class App extends Component {
 			.catch((error) => console.error(error));
 	};
 
+	/**
+	 * Logout function.
+	 *
+	 * return void
+	 */
 	onLogout = () => {
 		firebase
 			.auth()
@@ -77,7 +82,7 @@ class App extends Component {
 			alert(
 				`Sorry, you've already reserved ${avail} timeslots this week!`
 			);
-			return;
+			return false;
 		}
 
 		return true;
