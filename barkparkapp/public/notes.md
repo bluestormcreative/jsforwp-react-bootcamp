@@ -34,3 +34,10 @@
 -   Update alerts to be dashmessages with timeouts
 -   Save events to Firebase
 -   Save userData to Firebase
+
+QUESTIONS FOR ZAC
+
+1. SimpleStorage way not working - something about isAuthenticated check?
+2. Can I move the other stuff out of the render call?
+3. How best to think about refactoring? (other than firebase stuff from book)
+4. I can't figure out how to get user data from Firebase.
