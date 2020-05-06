@@ -4,7 +4,6 @@ import firebase from './firebase';
 import Login from './components/Login';
 import { Calendar, momentLocalizer } from 'react-big-calendar';
 import moment from 'moment';
-import { v4 as uuidv4 } from 'uuid';
 import 'react-big-calendar/lib/css/react-big-calendar.css';
 import './App.css';
 
@@ -14,9 +13,9 @@ class App extends Component {
 	state = {
 		events: [],
 		userData: {
-			id: 489,
+			id: null,
 			userName: 'Mo',
-			userEmail: 'mo@twobigdogs.us',
+			userEmail: '',
 			userPhone: '665-567-7890',
 			petNames: ['Leo', 'Lucy'],
 			reservedSlots: [],
@@ -25,14 +24,38 @@ class App extends Component {
 		isAuthenticated: false,
 	};
 
+	/**
+	 * Authenticate with database on login
+	 *
+	 * return void
+	 */
 	onLogin = (userEmail, userPass) => {
 		firebase
 			.auth()
 			.signInWithEmailAndPassword(userEmail, userPass)
-			.then((user) => this.setState({ isAuthenticated: true }))
+			.then((user) => {
+				this.setState({
+					isAuthenticated: true,
+				});
+			})
 			.catch((error) => console.error(error));
 	};
 
+	onLogout = () => {
+		firebase
+			.auth()
+			.signOut()
+			.then(() => {
+				this.setState({ isAuthenticated: false });
+			})
+			.catch((error) => console.error(error));
+	};
+
+	/**
+	 * Verify a new event can be created in the selected slot.
+	 *
+	 * return bool
+	 */
 	checkIfEventCanBeCreated = (slots, start, reserved, avail) => {
 		const now = new Date();
 
@@ -60,8 +83,10 @@ class App extends Component {
 		return true;
 	};
 
+	/**
+	 * Create a new event associated with the selected slot.
+	 */
 	handleNewEvent = ({ slots, start, end }) => {
-		// Destructured from slotInfo.
 		const { userData } = this.state;
 
 		const canCreateEvent = this.checkIfEventCanBeCreated(
@@ -75,13 +100,12 @@ class App extends Component {
 
 		if (canCreateEvent && wantCreateEvent) {
 			const title = `${userData.userName} & ${userData.petNames[0]}`;
-			const slotID = uuidv4();
 			const newEvent = {
 				key: null,
 				start: start.toString(),
 				end: end.toString(),
 				title,
-				slotID,
+				//userID: userData.id,
 			};
 			this.setState({
 				userData: {
@@ -96,6 +120,9 @@ class App extends Component {
 		}
 	};
 
+	/**
+	 * Delete a selected event.
+	 */
 	handleSelectEvent = (event) => {
 		if (window.confirm('Delete this event?')) {
 			const eventRef = firebase.database().ref('events/' + event.key);
@@ -103,8 +130,12 @@ class App extends Component {
 		}
 	};
 
+	/**
+	 * Update state from data source after component mounted.
+	 */
 	componentDidMount() {
 		const eventsRef = firebase.database().ref('events');
+
 		eventsRef.on('value', (snapshot) => {
 			const events = snapshot.val();
 			const newStateEvents = [];
@@ -114,11 +145,11 @@ class App extends Component {
 					start: new Date(events[event].start),
 					end: new Date(events[event].end),
 					title: events[event].title,
-					slotID: events[event].slotID,
+					// userID
 				});
 			}
-			this.setState({ events: newStateEvents });
 			this.setState({
+				events: newStateEvents,
 				userData: {
 					...this.state.userData,
 					reservedSlots: [...newStateEvents],
@@ -157,10 +188,7 @@ class App extends Component {
 		return (
 			<div className='App'>
 				{/* <SimpleStorage parent={this} /> */}
-				{!this.state.isAuthenticated && (
-					<Login onLogin={this.onLogin} />
-				)}
-				{this.state.isAuthenticated && (
+				{this.state.isAuthenticated ? (
 					<div className='calendar__container'>
 						<div className='calendar__header'>
 							<div>
@@ -173,6 +201,14 @@ class App extends Component {
 								</p>
 							</div>
 							<div>
+								<button
+									className='btn btn--logout'
+									onClick={(event) => {
+										event.preventDefault();
+										this.onLogout();
+									}}>
+									Logout
+								</button>
 								<p>Slots available: {remainingSlots}</p>
 								<p>Your reserved timeslots:</p>
 								<ul>{currentSlots}</ul>
@@ -191,8 +227,11 @@ class App extends Component {
 							min={moment('06:00am', 'h:mma').toDate()}
 							max={moment('09:00pm', 'h:mma').toDate()}
 							onSelectEvent={this.handleSelectEvent}
+							currentUser={this.state.userData.id}
 						/>
 					</div>
+				) : (
+					<Login onLogin={this.onLogin} />
 				)}
 			</div>
 		);
