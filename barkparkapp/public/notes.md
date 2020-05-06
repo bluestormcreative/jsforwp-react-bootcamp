@@ -40,6 +40,7 @@ QUESTIONS FOR ZAC
 
 1. SimpleStorage is totally not working - something about isAuthenticated check? somehow the dates are getting weird when i pass them into and out of state
 --- How can I stop having to log in everytime?
+2. I can't figure out how to add data to Firebase manually - I want to load some user data, do I need to create and import a JSON file?
 3. Can I move the other stuff out of the render call? I don't really understand what i'm doing here.
 4. How best to think about refactoring? (other than firebase stuff from book)
 5. I want to send the user a QR code for each event timeslot, but i'm not sure if I should just send a link to a 3rd party or maybe generate the code when the event is created and then display it on the dashboard at the time of the event?
