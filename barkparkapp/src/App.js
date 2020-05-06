@@ -9,6 +9,7 @@ import 'react-big-calendar/lib/css/react-big-calendar.css';
 import './App.css';
 
 const localizer = momentLocalizer(moment);
+const dayLayoutAlgorithm = 'no-overlap';
 
 class App extends Component {
 	state = {
@@ -35,7 +36,13 @@ class App extends Component {
 			.auth()
 			.signInWithEmailAndPassword(userEmail, userPass)
 			.then((user) => {
+				console.log(user); // eslint-disable-line no-console
 				this.setState({
+					userData: {
+						...this.state.userData,
+						id: user.user.uid,
+						userEmail: user.user.email,
+					},
 					isAuthenticated: true,
 				});
 			})
@@ -111,7 +118,7 @@ class App extends Component {
 				start: start.toString(),
 				end: end.toString(),
 				title,
-				//userID: userData.id,
+				userID: userData.id,
 			};
 			this.setState({
 				userData: {
@@ -151,7 +158,7 @@ class App extends Component {
 					start: new Date(events[event].start),
 					end: new Date(events[event].end),
 					title: events[event].title,
-					// userID
+					userID: this.state.userData.id
 				});
 			}
 			this.setState({
@@ -236,6 +243,7 @@ class App extends Component {
 							max={moment('09:00pm', 'h:mma').toDate()}
 							onSelectEvent={this.handleSelectEvent}
 							currentUser={this.state.userData.id}
+							dayLayoutAlgorithm={dayLayoutAlgorithm}
 						/>
 					</div>
 				) : (
