@@ -1,7 +1,7 @@
 .App__login {
 	border: 1px solid #ddd;
 	padding: 30px;
-	margin: 0 auto;
+	margin: 100px auto;
 	max-width: 400px;
 }
 
@@ -15,10 +15,6 @@
 .calendar__header {
 	display: flex;
 	justify-content: space-between;
-}
-
-.calendar__header div:last-of-type {
-	padding-right: 30px;
 }
 
 .calendar__container ul {
@@ -83,4 +79,79 @@
 	color: white;
 	font-weight: bold;
 	padding: 10px;
+}
+
+.btn {
+	display: flex;
+	overflow: hidden;
+
+	min-width: 100px;
+	margin: 10px;
+	padding: 12px 12px;
+
+	cursor: pointer;
+	user-select: none;
+	transition: all 150ms linear;
+	text-align: center;
+	white-space: nowrap;
+	text-decoration: none !important;
+	text-transform: none;
+	text-transform: capitalize;
+
+	color: #fff;
+	background: #416dea;
+	border: 0 none;
+	border-radius: 36px;
+
+	font-size: 13px;
+	font-weight: 500;
+	line-height: 1.3;
+
+	-webkit-appearance: none;
+	-moz-appearance: none;
+	appearance: none;
+
+	justify-content: center;
+	align-items: center;
+	flex: 0 0 160px;
+
+	box-shadow: 2px 5px 10px #e4e4e4;
+}
+
+.btn--login:hover {
+	transition: all 150ms linear;
+
+	opacity: 0.85;
+}
+
+.btn--login:active {
+	transition: all 150ms linear;
+	opacity: 0.75;
+}
+
+.btn--login:focus {
+	outline: 1px dotted #959595;
+	outline-offset: -4px;
+}
+
+.btn--logout {
+	margin-left: auto;
+}
+
+form p {
+	display: flex;
+	align-items: center;
+}
+
+form label {
+	display: inline-block;
+	width: 100px;
+}
+
+form input {
+	border: 1px solid #ddd;
+	border-radius: none;
+	padding: 5px;
+	font-size: 16px;
+	width: calc(100% - 100px);
 }

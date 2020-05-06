@@ -39,6 +39,7 @@ export default class Login extends Component {
 				</p>
 				<p>
 					<button
+						className='btn btn--login'
 						type='submit'
 						disabled={
 							!this.state.userEmail && !this.state.userPass
