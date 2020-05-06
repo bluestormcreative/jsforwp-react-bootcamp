@@ -34,6 +34,7 @@
 -   Update alerts to be dashmessages with timeouts
 -   Save events to Firebase
 -   Save userData to Firebase
+-   Text user a link to a unique QR code 10 minutes before the time of their slots.
 
 QUESTIONS FOR ZAC
 
@@ -41,3 +42,4 @@ QUESTIONS FOR ZAC
 2. Can I move the other stuff out of the render call?
 3. How best to think about refactoring? (other than firebase stuff from book)
 4. I can't figure out how to get user data from Firebase, always returns undefined but i can console log the user data after auth()
+5. I want to send the user a QR code for each event timeslot, but i'm not sure if I should just send a link to a 3rd party or maybe generate the code when the event is created and then display it on the dashboard at the time of the event?
