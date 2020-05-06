@@ -2,6 +2,7 @@ import React, { Component } from 'react';
 import firebase from './firebase';
 // import SimpleStorage from 'react-simple-storage';
 import Login from './components/Login';
+// import EventQR from './components/EventQR';
 import { Calendar, momentLocalizer } from 'react-big-calendar';
 import moment from 'moment';
 import 'react-big-calendar/lib/css/react-big-calendar.css';
@@ -204,8 +205,7 @@ class App extends Component {
 									Bark Park Calendar
 								</h2>
 								<p className='calendar__description'>
-									Click on a 30min timeslot to reserve your
-									spot!
+									Click on a 30min timeslot to reserve it!
 								</p>
 							</div>
 							<div>
