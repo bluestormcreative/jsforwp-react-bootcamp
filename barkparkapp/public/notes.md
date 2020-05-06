@@ -26,10 +26,10 @@
     -- all other reserved slots
 
 [x] Nice to have: a list of upcoming reservedSlots that shows on the user dash
+[x] sort this by date upcoming
 
 [x] User login
-
--   User logout
+[x] User logout
 
 -   Update alerts to be dashmessages with timeouts
 -   Save events to Firebase
@@ -40,4 +40,4 @@ QUESTIONS FOR ZAC
 1. SimpleStorage way not working - something about isAuthenticated check?
 2. Can I move the other stuff out of the render call?
 3. How best to think about refactoring? (other than firebase stuff from book)
-4. I can't figure out how to get user data from Firebase.
+4. I can't figure out how to get user data from Firebase, always returns undefined but i can console log the user data after auth()
