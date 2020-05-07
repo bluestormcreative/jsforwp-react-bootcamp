@@ -1,51 +1,42 @@
-import React, { Component } from 'react';
+import React, { useState, useEffect } from 'react';
 import { v4 as uuidv4 } from 'uuid';
-import { Calendar, momentLocalizer } from 'react-big-calendar';
 import moment from 'moment';
+import firebase from './firebase';
 
+import CalendarContainer from './components/CalendarContainer';
 import Login from './components/Login';
 import Modal from './components/Modal';
-import UserSlotsList from './components/UserSlotsList';
 
-import 'react-big-calendar/lib/css/react-big-calendar.css';
 import './App.css';
 
-const localizer = momentLocalizer(moment);
-const dayLayoutAlgorithm = 'no-overlap';
+function App(props) {
+	const [events, setEvents] = useState([]);
+	const [userData, setUserData] = useState({});
+	const [isAuthenticated, setIsAuthenticated] = useState(false);
+	const [modalOpen, setModalOpen] = useState(false);
+	const [modalContent, setModalContent] = useState('');
+	const [selectedEvent, setSelectedEvent] = useState({});
 
-class App extends Component {
-	state = {
-		events: [],
-		userData: {
-			id: '',
-			userName: '',
-			userEmail: '',
-			petNames: [],
-			reservedSlots: [],
-			availSlots: 3,
-		},
-		isAuthenticated: false,
-		modalOpen: false,
-		modalContent: '',
-		selectedEvent: {},
-	};
+	const { appService } = props;
 
 	/**
-	 * Authenticate with database on login
+	 * Authenticate on login
 	 *
 	 * return void
 	 */
-	onLogin = (userEmail, userPass) => {
-		this.props.appService
-			.login(userEmail, userPass)
-			.then((user) => {
-				this.setState({
-					userData: {
-						...this.state.userData,
-						id: user.user.uid,
-						userEmail: user.user.email,
-					},
-					isAuthenticated: true,
+	const onLogin = (email, password) => {
+		firebase
+			.auth()
+			.signInWithEmailAndPassword(email, password)
+			.then((response) => {
+				const userInfo = appService.getUserData(response.user);
+				userInfo.then((data) => {
+					setUserData({
+						...data,
+						email: response.user['email'],
+						id: response.user['uid'],
+					});
+					setIsAuthenticated(true);
 				});
 			})
 			.catch((error) => console.error(error));
@@ -56,26 +47,45 @@ class App extends Component {
 	 *
 	 * return void
 	 */
-	onLogout = () => {
-		this.props.appService
+	const onLogout = () => {
+		appService
 			.logout()
 			.then(() => {
-				this.setState({ isAuthenticated: false });
+				setIsAuthenticated(false);
 			})
 			.catch((error) => console.error(error));
 	};
 
 	/**
+	 * Get previous sibling elements that match a selector.
+	 */
+	const getPrevSiblings = (elem, selector) => {
+		let sibling = elem.previousElementSibling;
+		let allSiblings = [];
+
+		// If the sibling matches our selector, use it
+		// If not, jump to the next sibling and continue the loop
+		while (sibling) {
+			if (sibling.matches(selector)) {
+				allSiblings.push(sibling);
+			}
+			sibling = sibling.previousElementSibling;
+		}
+
+		return allSiblings;
+	};
+
+	/**
 	 * Add class selector to past day columns.
 	 */
-	shadePastDays = () => {
+	const shadePastDays = () => {
 		const today = document.querySelector('.rbc-day-slot.rbc-today');
 
 		if (!today) {
 			return;
 		}
 
-		const dayCols = this.getPrevSiblings(today, '.rbc-day-slot');
+		const dayCols = getPrevSiblings(today, '.rbc-day-slot');
 		for (const day of dayCols) {
 			day.classList.add('past-day');
 		}
@@ -86,34 +96,28 @@ class App extends Component {
 	 *
 	 * return bool
 	 */
-	checkIfEventCanBeCreated = (slots, start, reserved, avail) => {
+	const checkIfEventCanBeCreated = (slots, start, reserved, avail) => {
 		const now = new Date();
 
 		// Return if the timeslot is past.
 		if (start.getTime() < now.getTime()) {
-			this.setState({
-				modalContent: 'expired',
-				modalOpen: true,
-			});
+			setModalContent('expired');
+			setModalOpen(true);
 			return false;
 		}
 
 		// Return if the user tries to select a longer timeslot.
 		// TODO try to disable select by drag so we don't need this...
 		if (slots.length > 2) {
-			this.setState({
-				modalContent: 'slotLength',
-				modalOpen: true,
-			});
+			setModalContent('slotLength');
+			setModalOpen(true);
 			return false;
 		}
 
 		// Return if user has already reserved all their available slots.
 		if (reserved.length > avail - 1) {
-			this.setState({
-				modalContent: 'noneLeft',
-				modalOpen: true,
-			});
+			setModalContent('noneLeft');
+			setModalOpen(true);
 			return false;
 		}
 
@@ -123,10 +127,8 @@ class App extends Component {
 	/**
 	 * Create a new event associated with the selected slot.
 	 */
-	handleNewEvent = ({ slots, start, end }) => {
-		const { userData } = this.state;
-
-		const canCreateEvent = this.checkIfEventCanBeCreated(
+	const handleNewEvent = ({ slots, start, end }) => {
+		const canCreateEvent = checkIfEventCanBeCreated(
 			slots,
 			start,
 			userData.reservedSlots,
@@ -144,22 +146,38 @@ class App extends Component {
 				userID: userData.id,
 				qrValue: qrValue,
 			};
-			this.setState({
-				userData: {
-					...userData,
-					reservedSlots: [...userData.reservedSlots, newEvent],
-				},
-			});
 
 			delete newEvent.key;
-			this.props.appService.saveNewEvent(newEvent);
+			appService.saveNewEvent(newEvent);
+			setUserData({
+				...userData,
+				reservedSlots: [...userData.reservedSlots, newEvent],
+			});
 		}
 	};
 
+	const updateUserData = (selectedEvent) => {
+		console.log(selectedEvent); // eslint-disable-line no-console
+		const newReservedSlots = userData.reservedSlots.filter((item) => {
+			console.log(item); // eslint-disable-line no-console
+			return item.qrValue !== selectedEvent.qrValue;
+		});
+		console.log(newReservedSlots); // eslint-disable-line no-console
+		// const userRef = firebase.database().ref('users/' + userData.id);
+		// userRef.update({
+		// 	...userData,
+		// 	reservedSlots: [...newReservedSlots],
+		// });
+		setUserData({
+			...userData,
+			reservedSlots: [...newReservedSlots],
+		});
+	};
+
 	/**
-	 * Delete a selected event.
+	 * Logic for a selected event.
 	 */
-	handleSelectEvent = (event) => {
+	const handleSelectEvent = (event) => {
 		const now = new Date();
 		let contentFlag = 'delete';
 
@@ -167,51 +185,28 @@ class App extends Component {
 			contentFlag = 'expired';
 		}
 
-		if (event.userID !== this.state.userData.id) {
+		if (event.userID !== userData.id) {
 			contentFlag = 'notAllowed';
 		}
 
-		this.setState({
-			modalOpen: true,
-			modalContent: contentFlag,
-			selectedEvent: event,
-		});
+		setModalContent(contentFlag);
+		setModalOpen(true);
+		setSelectedEvent(event);
 	};
 
 	/**
 	 * Toggle an active modal.
 	 */
-	toggleModal = () => {
-		this.setState({
-			modalOpen: !this.state.modalOpen,
-			modalContent: this.state.modalContent,
-			selectedEvent: this.state.selectedEvent,
-		});
-	};
-
-	/**
-	 * Get previous sibling elements that match a selector.
-	 */
-	getPrevSiblings = (elem, selector) => {
-		let sibling = elem.previousElementSibling;
-		let allSiblings = [];
-
-		// If the sibling matches our selector, use it
-		// If not, jump to the next sibling and continue the loop
-		while (sibling) {
-			if (sibling.matches(selector)) {
-				allSiblings.push(sibling);
-			}
-			sibling = sibling.previousElementSibling;
-		}
-
-		return allSiblings;
+	const toggleModal = () => {
+		setModalContent(modalContent);
+		setModalOpen(!modalOpen);
+		setSelectedEvent(selectedEvent);
 	};
 
 	/**
 	 * Format time data from an event object.
 	 */
-	formatEventTime = (obj) => {
+	const formatEventTime = (obj) => {
 		if (typeof obj !== 'object') {
 			return null;
 		}
@@ -230,144 +225,43 @@ class App extends Component {
 	/**
 	 * Update state from data source after component mounted.
 	 */
-	componentDidMount() {
-		this.props.appService.subscribeToEvents((events) =>
-			this.setState({
-				events,
-				userData: {
-					...this.state.userData,
-					reservedSlots: [...events],
-				},
-			})
-		);
+	useEffect(() => {
+		shadePastDays();
+	});
 
-		// if (this.state.isAuthenticated) {
-		// 	this.props.appService.getUserData(
-		// 		this.state.userData.id,
-		// 		(newUserData) => {
-		// 			this.setState({
-		// 				userData: {
-		// 					...this.state.userData,
-		// 					...newUserData,
-		// 				},
-		// 			});
-		// 		}
-		// 	);
-		// }
-
-		this.shadePastDays();
-	}
-
-	componentDidUpdate() {
-		this.shadePastDays();
-	}
-
-	render() {
-		const remainingSlots =
-			this.state.userData.availSlots -
-			this.state.userData.reservedSlots.length;
-
-		let currentSlots = this.state.userData.reservedSlots.map((obj) => {
-			const now = new Date();
-			const eventTime = this.formatEventTime(obj);
-			let listItemClassName = 'userslots__item';
-
-			if (new Date(obj.start).getTime() < now.getTime()) {
-				listItemClassName += ' expired-item';
-			}
-
-			return (
-				<li key={eventTime['eventKey']} className={listItemClassName}>
-					<span className='day'>{eventTime['day']}</span>
-					<span className='date'>{eventTime['date']}</span>
-					<span className='times'>
-						{eventTime['start']} - {eventTime['end']}
-					</span>
-				</li>
-			);
-		});
-
-		if (currentSlots.length === 0) {
-			currentSlots = (
-				<li className='no-slots'>
-					You haven't reserved any timeslots yet!
-				</li>
-			);
-		} else {
-			currentSlots.sort((a, b) => a.key - b.key);
-		}
-
-		return (
-			<div className='App'>
-				{this.state.isAuthenticated ? (
-					<>
-						<Modal
-							modalOpen={this.state.modalOpen}
-							modalContent={this.state.modalContent}
-							selectedEvent={this.state.selectedEvent}
-							toggleModal={this.toggleModal}
-							formatTime={this.formatEventTime}
-							deleteEvent={this.props.appService.deleteEvent}
-							availSlots={this.state.userData.availSlots}
-						/>
-						<div className='calendar__container'>
-							<div className='calendar__header'>
-								<div className='header__column'>
-									<h2 className='calendar__heading'>
-										Bark Park Calendar
-									</h2>
-									<p>
-										Click on a 30min timeslot to reserve it!
-									</p>
-									<p>
-										Each timeslot will generate a QR code to
-										open the lock on the gate at that time.
-									</p>
-									<p>
-										To release a timeslot, click on it again
-										and confirm to delete it form the
-										calendar.
-									</p>
-								</div>
-								<div className='header__column'>
-									<button
-										className='btn btn--logout'
-										onClick={(event) => {
-											event.preventDefault();
-											this.onLogout();
-										}}>
-										Logout
-									</button>
-									<UserSlotsList
-										remainingSlots={remainingSlots}
-										currentSlots={currentSlots}
-									/>
-								</div>
-							</div>
-							<Calendar
-								localizer={localizer}
-								defaultDate={new Date()}
-								defaultView='week'
-								events={this.state.events}
-								onSelectSlot={this.handleNewEvent}
-								selectable
-								step={30}
-								showMultiDayTimes
-								views={['week']}
-								min={moment('06:00am', 'h:mma').toDate()}
-								max={moment('09:00pm', 'h:mma').toDate()}
-								onSelectEvent={this.handleSelectEvent}
-								currentUser={this.state.userData.id}
-								dayLayoutAlgorithm={dayLayoutAlgorithm}
-							/>
-						</div>
-					</>
-				) : (
-					<Login onLogin={this.onLogin} />
-				)}
-			</div>
-		);
-	}
+	return (
+		<div className='App'>
+			{isAuthenticated ? (
+				<>
+					<Modal
+						modalOpen={modalOpen}
+						modalContent={modalContent}
+						selectedEvent={selectedEvent}
+						toggleModal={toggleModal}
+						formatTime={formatEventTime}
+						userData={userData}
+						setUserData={setUserData}
+						appService={appService}
+						updateUserData={updateUserData}
+					/>
+					<CalendarContainer
+						appService={appService}
+						F
+						events={events}
+						userData={userData}
+						handleSelectEvent={handleSelectEvent}
+						handleNewEvent={handleNewEvent}
+						onLogout={onLogout}
+						setEvents={setEvents}
+						setUserData={setUserData}
+						formatTime={formatEventTime}
+					/>
+				</>
+			) : (
+				<Login onLogin={onLogin} />
+			)}
+		</div>
+	);
 }
 
 export default App;

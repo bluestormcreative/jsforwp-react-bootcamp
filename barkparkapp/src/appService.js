@@ -1,13 +1,13 @@
 import firebase from './firebase';
 
 export default new (class AppService {
-	login(email, password) {
+	login = (email, password) => {
 		return firebase.auth().signInWithEmailAndPassword(email, password);
-	}
+	};
 
-	logout() {
+	logout = () => {
 		return firebase.auth().signOut();
-	}
+	};
 
 	saveNewEvent = (event) => {
 		return firebase
@@ -22,7 +22,7 @@ export default new (class AppService {
 		return firebase.database().ref(`events/${event.key}`).remove();
 	};
 
-	subscribeToEvents(callback) {
+	subscribeToEvents = (callback) => {
 		firebase
 			.database()
 			.ref('events')
@@ -41,22 +41,14 @@ export default new (class AppService {
 				}
 				callback(newStateEvents);
 			});
-	}
+	};
 
-	// getUserData(userID, callback) {
-	// 	console.log(userID); // eslint-disable-line no-console
-	// 	firebase
-	// 		.database()
-	// 		.ref('users/' + userID)
-	// 		.on('value', (snapshot) => {
-	// 			const user = snapshot.val();
-	// 			const newUserData = {
-	// 				userName: user.userName,
-	// 				petNames: user.petNames,
-	// 				reservedSlots: user.reservedSlots,
-	// 				availSlots: user.availSlots,
-	// 			};
-	// 			callback(newUserData);
-	// 		});
-	// }
+	getUserData = async (user) => {
+		const snapshot = await firebase
+			.database()
+			.ref('/users/' + user.uid)
+			.once('value');
+		const userInfo = { ...snapshot.val() };
+		return userInfo;
+	};
 })();
