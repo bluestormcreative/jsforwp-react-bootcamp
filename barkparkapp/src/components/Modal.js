@@ -10,8 +10,9 @@ const Modal = (props) => {
 		modalContent,
 		selectedEvent,
 		formatTime,
-		deleteEvent,
-		availSlots,
+		appService,
+		userData,
+		updateUserData,
 	} = props;
 
 	if (!modalOpen) {
@@ -32,12 +33,13 @@ const Modal = (props) => {
 							selectedEvent={selectedEvent}
 							toggleModal={toggleModal}
 							formatTime={formatTime}
-							deleteEvent={deleteEvent}
+							deleteEvent={appService.deleteEvent}
+							updateUserData={updateUserData}
 						/>
 					) : (
 						<WarningDialog
 							type={modalContent}
-							availSlots={availSlots}
+							availSlots={userData.availSlots}
 						/>
 					)}
 				</div>

@@ -149,7 +149,29 @@ function App(props) {
 
 			delete newEvent.key;
 			appService.saveNewEvent(newEvent);
+			setUserData({
+				...userData,
+				reservedSlots: [...userData.reservedSlots, newEvent],
+			});
 		}
+	};
+
+	const updateUserData = (selectedEvent) => {
+		console.log(selectedEvent); // eslint-disable-line no-console
+		const newReservedSlots = userData.reservedSlots.filter((item) => {
+			console.log(item); // eslint-disable-line no-console
+			return item.qrValue !== selectedEvent.qrValue;
+		});
+		console.log(newReservedSlots); // eslint-disable-line no-console
+		// const userRef = firebase.database().ref('users/' + userData.id);
+		// userRef.update({
+		// 	...userData,
+		// 	reservedSlots: [...newReservedSlots],
+		// });
+		setUserData({
+			...userData,
+			reservedSlots: [...newReservedSlots],
+		});
 	};
 
 	/**
@@ -201,13 +223,6 @@ function App(props) {
 	};
 
 	/**
-	 * Get existing events.
-	 */
-	const getExistingEvents = (events) => {
-		setEvents(events);
-	};
-
-	/**
 	 * Update state from data source after component mounted.
 	 */
 	useEffect(() => {
@@ -224,16 +239,18 @@ function App(props) {
 						selectedEvent={selectedEvent}
 						toggleModal={toggleModal}
 						formatTime={formatEventTime}
-						deleteEvent={appService.deleteEvent}
-						availSlots={userData.availSlots}
+						userData={userData}
+						setUserData={setUserData}
+						appService={appService}
+						updateUserData={updateUserData}
 					/>
 					<CalendarContainer
 						appService={appService}
+						F
 						events={events}
 						userData={userData}
 						handleSelectEvent={handleSelectEvent}
 						handleNewEvent={handleNewEvent}
-						getExistingEvents={getExistingEvents}
 						onLogout={onLogout}
 						setEvents={setEvents}
 						setUserData={setUserData}

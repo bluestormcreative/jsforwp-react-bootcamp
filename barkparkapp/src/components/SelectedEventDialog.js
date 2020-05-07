@@ -1,4 +1,5 @@
 import React, { useState } from 'react';
+import firebase from 'firebase';
 
 import Button from './Button';
 import EventQR from './EventQR';
@@ -7,12 +8,20 @@ const SelectedEventDialog = (props) => {
 	const [confirmDelete, setConfirmDelete] = useState(false);
 	const [createQR, setCreateQR] = useState(false);
 
-	const { selectedEvent, toggleModal, formatTime, deleteEvent } = props;
+	const {
+		selectedEvent,
+		toggleModal,
+		formatTime,
+		deleteEvent,
+		userData,
+		updateUserData,
+	} = props;
 
 	const eventTime = formatTime(selectedEvent);
 
 	const deleteTimeslot = () => {
 		deleteEvent(selectedEvent);
+		updateUserData(selectedEvent);
 		toggleModal();
 	};
 

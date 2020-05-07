@@ -7,7 +7,6 @@ import UserSlotsList from './UserSlotsList';
 import 'react-big-calendar/lib/css/react-big-calendar.css';
 
 const localizer = momentLocalizer(moment);
-const dayLayoutAlgorithm = 'no-overlap';
 
 const CalendarContainer = (props) => {
 	const {
@@ -28,44 +27,6 @@ const CalendarContainer = (props) => {
 			});
 		}
 	});
-
-	const getReservedSlots = () => {
-		if (userData.availSlots && userData.reservedSlots.length) {
-			return userData.availSlots - userData.reservedSlots.length;
-		}
-		return null;
-	};
-
-	const remainingSlots = getReservedSlots();
-	let currentSlots = userData.reservedSlots.map((obj) => {
-		const now = new Date();
-		const eventTime = formatTime(obj);
-		let listItemClassName = 'userslots__item';
-
-		if (new Date(obj.start).getTime() < now.getTime()) {
-			listItemClassName += ' expired-item';
-		}
-
-		return (
-			<li key={eventTime['eventKey']} className={listItemClassName}>
-				<span className='day'>{eventTime['day']}</span>
-				<span className='date'>{eventTime['date']}</span>
-				<span className='times'>
-					{eventTime['start']} - {eventTime['end']}
-				</span>
-			</li>
-		);
-	});
-
-	if (currentSlots.length === 0) {
-		currentSlots = (
-			<li className='no-slots'>
-				You haven't reserved any timeslots yet!
-			</li>
-		);
-	} else {
-		currentSlots.sort((a, b) => a.key - b.key);
-	}
 
 	return (
 		<div className='calendar__container'>
@@ -92,8 +53,8 @@ const CalendarContainer = (props) => {
 						Logout
 					</button>
 					<UserSlotsList
-						remainingSlots={remainingSlots}
-						currentSlots={currentSlots}
+						formatTime={formatTime}
+						userData={userData}
 					/>
 				</div>
 			</div>
@@ -111,7 +72,6 @@ const CalendarContainer = (props) => {
 				max={moment('09:00pm', 'h:mma').toDate()}
 				onSelectEvent={handleSelectEvent}
 				currentUser={userData.id}
-				dayLayoutAlgorithm={dayLayoutAlgorithm}
 			/>
 		</div>
 	);
