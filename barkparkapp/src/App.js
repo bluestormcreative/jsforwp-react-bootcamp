@@ -1,5 +1,4 @@
 import React, { Component } from 'react';
-import firebase from './firebase';
 import { v4 as uuidv4 } from 'uuid';
 import { Calendar, momentLocalizer } from 'react-big-calendar';
 import moment from 'moment';
@@ -19,9 +18,8 @@ class App extends Component {
 		events: [],
 		userData: {
 			id: '',
-			userName: 'Stew',
+			userName: 'Mo',
 			userEmail: '',
-			userPhone: '665-567-7890',
 			petNames: ['Lucy', 'Leo'],
 			reservedSlots: [],
 			availSlots: 3,
@@ -38,9 +36,8 @@ class App extends Component {
 	 * return void
 	 */
 	onLogin = (userEmail, userPass) => {
-		firebase
-			.auth()
-			.signInWithEmailAndPassword(userEmail, userPass)
+		this.props.appService
+			.login(userEmail, userPass)
 			.then((user) => {
 				this.setState({
 					userData: {
@@ -60,32 +57,12 @@ class App extends Component {
 	 * return void
 	 */
 	onLogout = () => {
-		firebase
-			.auth()
-			.signOut()
+		this.props.appService
+			.logout()
 			.then(() => {
 				this.setState({ isAuthenticated: false });
 			})
 			.catch((error) => console.error(error));
-	};
-
-	/**
-	 * Get previous sibling elements that match a selector.
-	 */
-	getPrevSiblings = (elem, selector) => {
-		let sibling = elem.previousElementSibling;
-		let allSiblings = [];
-
-		// If the sibling matches our selector, use it
-		// If not, jump to the next sibling and continue the loop
-		while (sibling) {
-			if (sibling.matches(selector)) {
-				allSiblings.push(sibling);
-			}
-			sibling = sibling.previousElementSibling;
-		}
-
-		return allSiblings;
 	};
 
 	/**
@@ -94,15 +71,15 @@ class App extends Component {
 	shadePastDays = () => {
 		const today = document.querySelector('.rbc-day-slot.rbc-today');
 
-		if ( !today ) {
+		if (!today) {
 			return;
 		}
 
 		const dayCols = this.getPrevSiblings(today, '.rbc-day-slot');
-		for (const day of dayCols ) {
+		for (const day of dayCols) {
 			day.classList.add('past-day');
 		}
-	}
+	};
 
 	/**
 	 * Verify a new event can be created in the selected slot.
@@ -117,7 +94,7 @@ class App extends Component {
 			this.setState({
 				modalContent: 'expired',
 				modalOpen: true,
-			})
+			});
 			return false;
 		}
 
@@ -127,7 +104,7 @@ class App extends Component {
 			this.setState({
 				modalContent: 'slot-length',
 				modalOpen: true,
-			})
+			});
 			return false;
 		}
 
@@ -136,7 +113,7 @@ class App extends Component {
 			this.setState({
 				modalContent: 'none-left',
 				modalOpen: true,
-			})
+			});
 			return false;
 		}
 
@@ -174,9 +151,8 @@ class App extends Component {
 				},
 			});
 
-			const eventsRef = firebase.database().ref('events');
 			delete newEvent.key;
-			eventsRef.push(newEvent);
+			this.props.appService.saveNewEvent(newEvent);
 		}
 	};
 
@@ -190,9 +166,10 @@ class App extends Component {
 		if (event.start.getTime() < now.getTime()) {
 			contentFlag = 'expired';
 		}
-		// if (event.userID !== this.state.userData.id) {
-		// 	contentFlag = 'notallowed';
-		// }
+
+		if (event.userID !== this.state.userData.id) {
+			contentFlag = 'notallowed';
+		}
 
 		this.setState({
 			modalOpen: true,
@@ -201,44 +178,68 @@ class App extends Component {
 		});
 	};
 
-		/**
+	/**
 	 * Toggle an active modal.
 	 */
 	toggleModal = () => {
 		this.setState({
-			modalOpen: ! this.state.modalOpen,
+			modalOpen: !this.state.modalOpen,
 			modalContent: this.state.modalContent,
 			selectedEvent: this.state.selectedEvent,
 		});
 	};
 
 	/**
+	 * Get previous sibling elements that match a selector.
+	 */
+	getPrevSiblings = (elem, selector) => {
+		let sibling = elem.previousElementSibling;
+		let allSiblings = [];
+
+		// If the sibling matches our selector, use it
+		// If not, jump to the next sibling and continue the loop
+		while (sibling) {
+			if (sibling.matches(selector)) {
+				allSiblings.push(sibling);
+			}
+			sibling = sibling.previousElementSibling;
+		}
+
+		return allSiblings;
+	};
+
+	/**
+	 * Format time data from an event object.
+	 */
+	formatEventTime = (obj) => {
+		if (typeof obj !== 'object') {
+			return null;
+		}
+
+		let eventTime = [];
+		const key = moment(obj.start);
+		eventTime['eventKey'] = key;
+		eventTime['day'] = key.format('ddd');
+		eventTime['date'] = key.format('MMM Do');
+		eventTime['start'] = key.format('h:mma');
+		eventTime['end'] = moment(obj.end).format('h:mma');
+
+		return eventTime;
+	};
+
+	/**
 	 * Update state from data source after component mounted.
 	 */
 	componentDidMount() {
-		const eventsRef = firebase.database().ref('events');
-
-		eventsRef.on('value', (snapshot) => {
-			const events = snapshot.val();
-			const newStateEvents = [];
-			for (let event in events) {
-				newStateEvents.push({
-					key: event,
-					start: new Date(events[event].start),
-					end: new Date(events[event].end),
-					title: events[event].title,
-					userID: this.state.userData.id,
-					qrValue: events[event].qrValue,
-				});
-			}
+		this.props.appService.subscribeToEvents((events) =>
 			this.setState({
-				events: newStateEvents,
+				events,
 				userData: {
 					...this.state.userData,
-					reservedSlots: [...newStateEvents],
+					reservedSlots: [...events],
 				},
-			});
-		});
+			})
+		);
 
 		this.shadePastDays();
 	}
@@ -246,25 +247,6 @@ class App extends Component {
 	componentDidUpdate() {
 		this.shadePastDays();
 	}
-
-	/**
-	 * Format time data from an event object.
-	 */
-	formatEventTime = (obj) => {
-		if (typeof obj !== 'object' ) {
-			return null;
-		}
-
-		let eventTime = [];
-			const key = moment(obj.start);
-			eventTime['eventKey'] = key;
-			eventTime['day'] = key.format('ddd');
-			eventTime['date'] = key.format('MMM Do');
-			eventTime['start'] = key.format('h:mma');
-			eventTime['end'] = moment(obj.end).format('h:mma');
-
-		return eventTime;
-	};
 
 	render() {
 		const remainingSlots =
@@ -276,7 +258,7 @@ class App extends Component {
 			const eventTime = this.formatEventTime(obj);
 			let listItemClassName = 'userslots__item';
 
-			if ( new Date(obj.start).getTime() < now.getTime() ) {
+			if (new Date(obj.start).getTime() < now.getTime()) {
 				listItemClassName += ' expired-item';
 			}
 
@@ -305,13 +287,14 @@ class App extends Component {
 			<div className='App'>
 				{this.state.isAuthenticated ? (
 					<>
-					<Modal
-						modalOpen={this.state.modalOpen}
-						modalContent={this.state.modalContent}
-						selectedEvent={this.state.selectedEvent}
-						toggleModal={this.toggleModal}
-						formatTime={this.formatEventTime}
-					/>
+						<Modal
+							modalOpen={this.state.modalOpen}
+							modalContent={this.state.modalContent}
+							selectedEvent={this.state.selectedEvent}
+							toggleModal={this.toggleModal}
+							formatTime={this.formatEventTime}
+							deleteEvent={this.props.appService.deleteEvent}
+						/>
 						<div className='calendar__container'>
 							<div className='calendar__header'>
 								<div className='header__column'>
@@ -322,9 +305,14 @@ class App extends Component {
 										Click on a 30min timeslot to reserve it!
 									</p>
 									<p>
-										Each timeslot will generate a QR code to open the lock on the gate at that time.
+										Each timeslot will generate a QR code to
+										open the lock on the gate at that time.
 									</p>
-									<p>To release a timeslot, click on it again and confirm to delete it form the calendar.</p>
+									<p>
+										To release a timeslot, click on it again
+										and confirm to delete it form the
+										calendar.
+									</p>
 								</div>
 								<div className='header__column'>
 									<button
