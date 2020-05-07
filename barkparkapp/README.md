@@ -1,4 +1,4 @@
-Bark Park Calendar app demo
+# Bark Park Calendar app demo
 
 https://barkparkcal.netlify.app/
 
