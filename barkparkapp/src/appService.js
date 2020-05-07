@@ -42,4 +42,21 @@ export default new (class AppService {
 				callback(newStateEvents);
 			});
 	}
+
+	// getUserData(userID, callback) {
+	// 	console.log(userID); // eslint-disable-line no-console
+	// 	firebase
+	// 		.database()
+	// 		.ref('users/' + userID)
+	// 		.on('value', (snapshot) => {
+	// 			const user = snapshot.val();
+	// 			const newUserData = {
+	// 				userName: user.userName,
+	// 				petNames: user.petNames,
+	// 				reservedSlots: user.reservedSlots,
+	// 				availSlots: user.availSlots,
+	// 			};
+	// 			callback(newUserData);
+	// 		});
+	// }
 })();

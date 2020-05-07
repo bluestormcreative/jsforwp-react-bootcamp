@@ -18,9 +18,9 @@ class App extends Component {
 		events: [],
 		userData: {
 			id: '',
-			userName: 'Mo',
+			userName: '',
 			userEmail: '',
-			petNames: ['Lucy', 'Leo'],
+			petNames: [],
 			reservedSlots: [],
 			availSlots: 3,
 		},
@@ -240,6 +240,20 @@ class App extends Component {
 				},
 			})
 		);
+
+		// if (this.state.isAuthenticated) {
+		// 	this.props.appService.getUserData(
+		// 		this.state.userData.id,
+		// 		(newUserData) => {
+		// 			this.setState({
+		// 				userData: {
+		// 					...this.state.userData,
+		// 					...newUserData,
+		// 				},
+		// 			});
+		// 		}
+		// 	);
+		// }
 
 		this.shadePastDays();
 	}
