@@ -43,6 +43,10 @@ export default new (class AppService {
 			});
 	}
 
+	getCurrentUser() {
+		return firebase.auth().currentUser;
+	}
+
 	// getUserData(userID, callback) {
 	// 	console.log(userID); // eslint-disable-line no-console
 	// 	firebase
