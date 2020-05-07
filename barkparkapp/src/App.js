@@ -160,14 +160,6 @@ class App extends Component {
 			selectedEvent: this.state.selectedEvent || {},
 		});
 	};
-	/**
-	 * Create the event-specific QR code.
-	 */
-	createEventQR(value) {
-		const eventQR = '';
-
-		return eventQR;
-	}
 
 	/**
 	 * Update state from data source after component mounted.
@@ -258,15 +250,19 @@ class App extends Component {
 					/>
 						<div className='calendar__container'>
 							<div className='calendar__header'>
-								<div>
+								<div className='header__column'>
 									<h2 className='calendar__heading'>
 										Bark Park Calendar
 									</h2>
-									<p className='calendar__description'>
+									<p>
 										Click on a 30min timeslot to reserve it!
 									</p>
+									<p>
+										Each timeslot will generate a QR code to open the lock on the gate at that time.
+									</p>
+									<p>To release a timeslot, click on it again and confirm to delete it form the calendar.</p>
 								</div>
-								<div>
+								<div className='header__column'>
 									<button
 										className='btn btn--logout'
 										onClick={(event) => {
