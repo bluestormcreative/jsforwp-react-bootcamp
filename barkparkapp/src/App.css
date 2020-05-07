@@ -146,6 +146,22 @@
   border-radius: 15px;
 }
 
+.btn--linklike {
+  background-color: transparent;
+  text-decoration: underline !important;
+  color: black;
+  border: 0;
+  padding: 10px;
+  margin: 0;
+  display: inline-block;
+  box-shadow: none;
+}
+
+.btn--linklike:hover,
+.btn--linklike:focus {
+  text-decoration: none !important;
+}
+
 form p {
 	display: flex;
 	align-items: center;
@@ -199,7 +215,20 @@ form input {
   text-align: center;
 }
 
-.modal__content .container {
+.modal__content .container--flex {
   display: flex;
   align-items: space-between;
+}
+
+.modal__content .container--center {
+  text-align: center;
+}
+
+.modal__content .container--center .btn {
+  display: block;
+  margin: 0 auto;
+}
+
+.modal__content .delete-confirmation {
+  color: #88141f;
 }
