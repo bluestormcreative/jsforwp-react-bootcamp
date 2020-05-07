@@ -24,7 +24,7 @@ const SelectedEventDialog = (props) => {
 
     return(
         <>
-            <h2 className='modal__title'>{eventTime['day']}{eventTime['date']}</h2>
+            <h2 className='modal__title'>{eventTime['day']} {eventTime['date']}</h2>
             <h4 className='modal__subtitle'>{eventTime['start']} - {eventTime['end']}</h4>
             { ! confirmDelete && ! createQR && (
                 <div className='container container--flex'>
