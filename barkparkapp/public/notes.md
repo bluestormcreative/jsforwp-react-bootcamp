@@ -25,6 +25,8 @@
     [x]-- the users reserved slots (limit 3)
     -- all other reserved slots
 
+- Stop ability to have two events at the same time -- check against the other keys somehow?
+
 [x] Nice to have: a list of upcoming reservedSlots that shows on the user dash
 [x] sort this by date upcoming
 
@@ -35,6 +37,15 @@
 -   Save events to Firebase
 -   Save userData to Firebase
 -   Text user a link to a unique QR code 10 minutes before the time of their slots.
+
+
+
+
+
+
+
+
+
 
 QUESTIONS FOR ZAC
 
