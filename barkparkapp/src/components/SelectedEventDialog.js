@@ -39,7 +39,7 @@ const SelectedEventDialog = (props) => {
 				</div>
 			)}
 			{confirmDelete && !createQR && (
-				<div class='container container--center'>
+				<div className='container container--center'>
 					<h3 className='delete-confirmation'>
 						Are you sure you want to let this timeslot go?
 					</h3>
@@ -57,7 +57,7 @@ const SelectedEventDialog = (props) => {
 			)}
 
 			{!confirmDelete && createQR && (
-				<div class='container container--center'>
+				<div className='container container--center'>
 					<EventQR qrvalue={selectedEvent.qrValue} />
 				</div>
 			)}
