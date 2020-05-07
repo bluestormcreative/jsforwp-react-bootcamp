@@ -1,5 +1,6 @@
 import React from 'react';
 import SelectedEventDialog from './SelectedEventDialog';
+import Button from './Button';
 
 const Modal = (props) => {
 
@@ -10,7 +11,11 @@ const Modal = (props) => {
     return(
         <div className='overlay'>
             <div className='modal'>
-                <button className="modal__close" onClick={props.closeModal}>Close</button>
+                <Button
+                    className="btn btn--small modal__close"
+                    onClick={props.toggleModal}
+                    text='Close'
+                />
                 <div className='modal__content'>
                     { props.modalContent === 'delete' && (
                         <SelectedEventDialog
