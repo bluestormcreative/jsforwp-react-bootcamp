@@ -29,7 +29,7 @@ function App(props) {
 			.auth()
 			.signInWithEmailAndPassword(email, password)
 			.then((response) => {
-				const userInfo = appService.getUserData(response.user);
+				const userInfo = appService.getAdditionalUserData(response.user);
 				userInfo.then((data) => {
 					setUserData({
 						...data,

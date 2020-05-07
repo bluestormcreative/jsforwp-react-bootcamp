@@ -43,7 +43,7 @@ export default new (class AppService {
 			});
 	};
 
-	getUserData = async (user) => {
+	getAdditionalUserData = async (user) => {
 		const snapshot = await firebase
 			.database()
 			.ref('/users/' + user.uid)
