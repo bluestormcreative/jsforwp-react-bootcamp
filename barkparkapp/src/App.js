@@ -70,6 +70,39 @@ class App extends Component {
 			.catch((error) => console.error(error));
 	};
 
+		getPrevSiblings = (elem, selector) => {
+		let sibling = elem.previousElementSibling;
+		let allSiblings = [];
+
+		// If the sibling matches our selector, use it
+		// If not, jump to the next sibling and continue the loop
+		while (sibling) {
+			if (sibling.matches(selector)) {
+				allSiblings.push(sibling);
+			}
+			sibling = sibling.previousElementSibling;
+		}
+
+		return allSiblings;
+	};
+
+	/**
+	 * Add class selector to past day columns.
+	 */
+	shadePastDays = () => {
+		const today = document.querySelector('.rbc-day-slot.rbc-today');
+
+		if ( !today ) {
+			return;
+		}
+
+		const dayCols = this.getPrevSiblings(today, '.rbc-day-slot');
+	console.log(dayCols); // eslint-disable-line no-console
+		for (const day of dayCols ) {
+			day.classList.add('past-day');
+		}
+	}
+
 	/**
 	 * Verify a new event can be created in the selected slot.
 	 *
@@ -80,7 +113,10 @@ class App extends Component {
 
 		// Return if the timeslot is past.
 		if (start.getTime() < now.getTime()) {
-			alert(`That time has past!`);
+			this.setState({
+				modalContent: 'expired',
+				modalOpen: true,
+			})
 			return false;
 		}
 
@@ -93,9 +129,10 @@ class App extends Component {
 
 		// Return if user has already reserved all their available slots.
 		if (reserved.length > avail - 1) {
-			alert(
-				`Sorry, you've already reserved ${avail} timeslots this week!`
-			);
+			this.setState({
+				modalContent: 'none-left',
+				modalOpen: true,
+			})
 			return false;
 		}
 
@@ -145,9 +182,16 @@ class App extends Component {
 	 * Delete a selected event.
 	 */
 	handleSelectEvent = (event) => {
+		const now = new Date();
+		let contentFlag = 'delete';
+
+		if (event.start.getTime() < now.getTime()) {
+			contentFlag = 'expired';
+		}
+
 		this.setState({
 			modalOpen: true,
-			modalContent: 'delete',
+			modalContent: contentFlag,
 			selectedEvent: event,
 		});
 	};
@@ -190,6 +234,8 @@ class App extends Component {
 				},
 			});
 		});
+
+		this.shadePastDays();
 	}
 
 	/**
@@ -217,11 +263,16 @@ class App extends Component {
 			this.state.userData.reservedSlots.length;
 
 		let currentSlots = this.state.userData.reservedSlots.map((obj) => {
-
+			const now = new Date();
 			const eventTime = this.formatEventTime(obj);
+			let listItemClassName = 'userslots__item';
+
+			if ( new Date(obj.start).getTime() < now.getTime() ) {
+				listItemClassName += ' expired-item';
+			}
 
 			return (
-				<li key={eventTime['eventKey']}>
+				<li key={eventTime['eventKey']} className={listItemClassName}>
 					<span className='day'>{eventTime['day']}</span>
 					<span className='date'>{eventTime['date']}</span>
 					<span className='times'>

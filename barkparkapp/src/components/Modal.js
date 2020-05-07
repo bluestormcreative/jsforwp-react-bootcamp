@@ -24,6 +24,13 @@ const Modal = (props) => {
                             formatTime={props.formatTime}
                         />
                     )}
+                    { props.modalContent === 'expired' && (
+                        <h3 className='modal__title expired'>You can no longer edit that timeslot.</h3>
+                    )}
+
+                    { props.modalContent === 'none-left' && (
+                        <h3 className='modal__title none-left'>Sorry! You've already reserved all your slots this week!</h3>
+                    )}
                 </div>
             </div>
         </div>

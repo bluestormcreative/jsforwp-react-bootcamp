@@ -37,6 +37,10 @@
 	border-bottom: 1px solid #ddd;
 }
 
+.rbc-time-column.past-day {
+  background-color: rgba(0,0,0,0.2);
+}s
+
 .rbc-day-slot .rbc-time-slot {
 	border-top-color: #ddd;
 }
@@ -200,6 +204,12 @@ form input {
   text-align: center;
 }
 
+.modal__title.expired,
+.modal__title.none-left {
+  color: #88141f;
+  margin-top: 60px;
+}
+
 .modal__content .container--flex {
   display: flex;
   align-items: space-between;
@@ -221,10 +231,15 @@ form input {
 .userslots {
   border: 1px solid #ddd;
   padding: 10px;
+  min-height: 130px;
 }
 
 .userslots p {
   margin-top: 0;
+}
+
+.userslots__remaining {
+  font-weight: 900;
 }
 
 .userslots__list {
@@ -234,7 +249,7 @@ form input {
   min-width: 250px;
 }
 
-.userslots__list li {
+.userslots__list .userslots__item {
 	display: flex;
 	list-style-type: none;
 	margin: 0;
@@ -242,20 +257,24 @@ form input {
 	justify-content: space-between;
 }
 
-.userslots__list li span {
+.userslots__list .userslots__item span {
 	display: inline-block;
 	padding-right: 5px;
 }
 
-.userslots__list li span.day {
+.userslots__list .userslots__item.expired-item span {
+  text-decoration: line-through;
+}
+
+.userslots__list .userslots__item span.day {
   min-width: 40px;
 }
 
-.userslots__list li span.date {
+.userslots__list .userslots__item span.date {
   min-width: 65px;
 }
 
-.userslots__list li span.times {
+.userslots__list .userslots__item span.times {
   min-width: 150px;
 }
 
