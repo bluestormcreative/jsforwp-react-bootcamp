@@ -17,6 +17,10 @@ class App extends Component {
 	state = {
 		events: [],
 		userData: {
+			id: '',
+			userName: '',
+			userEmail: '',
+			petNames: [],
 			reservedSlots: [],
 			availSlots: 3,
 		},
