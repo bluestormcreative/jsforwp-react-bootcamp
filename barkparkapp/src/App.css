@@ -20,29 +20,12 @@
 .calendar__header {
 	display: flex;
 	justify-content: space-between;
+  padding-bottom: 20px;
 }
 
-.calendar__container ul {
-	margin: 5px 0 0 20px;
-	min-height: 60px;
-	padding: 0;
-}
 
-.calendar__container ul li {
-	display: flex;
-	list-style-type: none;
-	margin: 0;
-	padding: 0;
-	justify-content: space-between;
-}
-
-.calendar__container ul li span {
-	display: inline-block;
-	padding-right: 5px;
-}
-
-.no-slots {
-	font-size: 12px;
+.header__column {
+  max-width: 60%;
 }
 
 .rbc-timeslot-group {
@@ -231,4 +214,50 @@ form input {
 
 .modal__content .delete-confirmation {
   color: #88141f;
+}
+
+.userslots {
+  border: 1px solid #ddd;
+  padding: 10px;
+}
+
+.userslots p {
+  margin-top: 0;
+}
+
+.userslots__list {
+  margin: 0;
+	min-height: 60px;
+	padding: 0;
+  min-width: 250px;
+}
+
+.userslots__list li {
+	display: flex;
+	list-style-type: none;
+	margin: 0;
+	padding: 0;
+	justify-content: space-between;
+}
+
+.userslots__list li span {
+	display: inline-block;
+	padding-right: 5px;
+}
+
+.userslots__list li span.day {
+  min-width: 40px;
+}
+
+.userslots__list li span.date {
+  min-width: 65px;
+}
+
+.userslots__list li span.times {
+  min-width: 150px;
+}
+
+.userslots__list .no-slots {
+  list-style-type: none;
+	font-size: 12px;
 }

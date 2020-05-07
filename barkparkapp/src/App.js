@@ -4,8 +4,11 @@ import { v4 as uuidv4 } from 'uuid';
 import QRCode from 'qrcode.react';
 import { Calendar, momentLocalizer } from 'react-big-calendar';
 import moment from 'moment';
+
 import Login from './components/Login';
 import Modal from './components/Modal';
+import UserSlotsList from './components/UserSlotsList';
+
 import 'react-big-calendar/lib/css/react-big-calendar.css';
 import './App.css';
 
@@ -201,7 +204,8 @@ class App extends Component {
 		let eventTime = [];
 			const key = moment(obj.start);
 			eventTime['eventKey'] = key;
-			eventTime['dayDate'] = key.format('ddd MMM Do');
+			eventTime['day'] = key.format('ddd');
+			eventTime['date'] = key.format('MMM Do');
 			eventTime['start'] = key.format('h:mma');
 			eventTime['end'] = moment(obj.end).format('h:mma');
 
@@ -219,8 +223,9 @@ class App extends Component {
 
 			return (
 				<li key={eventTime['eventKey']}>
-					<span>{eventTime['dayDate']}:</span>
-					<span>
+					<span className='day'>{eventTime['day']}</span>
+					<span className='date'>{eventTime['date']}</span>
+					<span className='times'>
 						{eventTime['start']} - {eventTime['end']}
 					</span>
 				</li>
@@ -271,9 +276,10 @@ class App extends Component {
 										}}>
 										Logout
 									</button>
-									<p>Slots available: {remainingSlots}</p>
-									<p>Your reserved timeslots:</p>
-									<ul>{currentSlots}</ul>
+									<UserSlotsList
+										remainingSlots={remainingSlots}
+										currentSlots={currentSlots}
+									/>
 								</div>
 							</div>
 							<Calendar
