@@ -246,7 +246,6 @@ function App(props) {
 					/>
 					<CalendarContainer
 						appService={appService}
-						F
 						events={events}
 						userData={userData}
 						handleSelectEvent={handleSelectEvent}
