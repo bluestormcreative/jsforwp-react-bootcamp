@@ -10,6 +10,15 @@
 	box-shadow: 2px 5px 10px #e4e4e4;
 }
 
+.App__login h2 {
+	text-align: center;
+}
+
+.App__login form .btn {
+	display: inline-block;
+	margin: 10px auto;
+}
+
 .calendar__container {
 	margin: 30px auto 160px;
 	max-width: 80%;
