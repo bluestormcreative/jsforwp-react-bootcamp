@@ -1,9 +1,11 @@
 import React, { Component } from 'react';
 import firebase from './firebase';
-import Login from './components/Login';
-// import EventQR from './components/EventQR';
+import { v4 as uuidv4 } from 'uuid';
+import QRCode from 'qrcode.react';
 import { Calendar, momentLocalizer } from 'react-big-calendar';
 import moment from 'moment';
+import Login from './components/Login';
+import Modal from './components/Modal';
 import 'react-big-calendar/lib/css/react-big-calendar.css';
 import './App.css';
 
@@ -14,7 +16,7 @@ class App extends Component {
 	state = {
 		events: [],
 		userData: {
-			id: null,
+			id: 't9UOnZMj9ib65zlR47YFMQ9WTx22',
 			userName: 'Mo',
 			userEmail: '',
 			userPhone: '665-567-7890',
@@ -22,7 +24,10 @@ class App extends Component {
 			reservedSlots: [],
 			availSlots: 3,
 		},
-		isAuthenticated: false,
+		isAuthenticated: true,
+		modalOpen: false,
+		modalContent: '',
+		selectedEvent: {},
 	};
 
 	/**
@@ -112,12 +117,14 @@ class App extends Component {
 
 		if (canCreateEvent && wantCreateEvent) {
 			const title = `${userData.userName} & ${userData.petNames[0]}`;
+			const qrValue = uuidv4();
 			const newEvent = {
 				key: null,
 				start: start.toString(),
 				end: end.toString(),
 				title,
 				userID: userData.id,
+				qrValue: qrValue,
 			};
 			this.setState({
 				userData: {
@@ -136,11 +143,31 @@ class App extends Component {
 	 * Delete a selected event.
 	 */
 	handleSelectEvent = (event) => {
-		if (window.confirm('Delete this event?')) {
-			const eventRef = firebase.database().ref('events/' + event.key);
-			eventRef.remove();
-		}
+		this.setState({
+			modalOpen: true,
+			modalContent: 'delete',
+			selectedEvent: event,
+		});
 	};
+
+		/**
+	 * Toggle an active modal.
+	 */
+	toggleModal = () => {
+		this.setState({
+			modalOpen: ! this.state.modalOpen,
+			modalContent: this.state.modalContent || '',
+			selectedEvent: this.state.selectedEvent || {},
+		});
+	};
+	/**
+	 * Create the event-specific QR code.
+	 */
+	createEventQR(value) {
+		const eventQR = '';
+
+		return eventQR;
+	}
 
 	/**
 	 * Update state from data source after component mounted.
@@ -157,7 +184,8 @@ class App extends Component {
 					start: new Date(events[event].start),
 					end: new Date(events[event].end),
 					title: events[event].title,
-					userID: this.state.userData.id
+					userID: this.state.userData.id,
+					qrValue: events[event].qrValue,
 				});
 			}
 			this.setState({
@@ -203,47 +231,55 @@ class App extends Component {
 		return (
 			<div className='App'>
 				{this.state.isAuthenticated ? (
-					<div className='calendar__container'>
-						<div className='calendar__header'>
-							<div>
-								<h2 className='calendar__heading'>
-									Bark Park Calendar
-								</h2>
-								<p className='calendar__description'>
-									Click on a 30min timeslot to reserve it!
-								</p>
+					<>
+					<Modal
+						modalOpen={this.state.modalOpen}
+						modalContent={this.state.modalContent}
+						selectedEvent={this.state.selectedEvent}
+						toggleModal={this.toggleModal}
+					/>
+						<div className='calendar__container'>
+							<div className='calendar__header'>
+								<div>
+									<h2 className='calendar__heading'>
+										Bark Park Calendar
+									</h2>
+									<p className='calendar__description'>
+										Click on a 30min timeslot to reserve it!
+									</p>
+								</div>
+								<div>
+									<button
+										className='btn btn--logout'
+										onClick={(event) => {
+											event.preventDefault();
+											this.onLogout();
+										}}>
+										Logout
+									</button>
+									<p>Slots available: {remainingSlots}</p>
+									<p>Your reserved timeslots:</p>
+									<ul>{currentSlots}</ul>
+								</div>
 							</div>
-							<div>
-								<button
-									className='btn btn--logout'
-									onClick={(event) => {
-										event.preventDefault();
-										this.onLogout();
-									}}>
-									Logout
-								</button>
-								<p>Slots available: {remainingSlots}</p>
-								<p>Your reserved timeslots:</p>
-								<ul>{currentSlots}</ul>
-							</div>
+							<Calendar
+								localizer={localizer}
+								defaultDate={new Date()}
+								defaultView='week'
+								events={this.state.events}
+								onSelectSlot={this.handleNewEvent}
+								selectable
+								step={30}
+								showMultiDayTimes
+								views={['week']}
+								min={moment('06:00am', 'h:mma').toDate()}
+								max={moment('09:00pm', 'h:mma').toDate()}
+								onSelectEvent={this.handleSelectEvent}
+								currentUser={this.state.userData.id}
+								dayLayoutAlgorithm={dayLayoutAlgorithm}
+							/>
 						</div>
-						<Calendar
-							localizer={localizer}
-							defaultDate={new Date()}
-							defaultView='week'
-							events={this.state.events}
-							onSelectSlot={this.handleNewEvent}
-							selectable
-							step={30}
-							showMultiDayTimes
-							views={['week']}
-							min={moment('06:00am', 'h:mma').toDate()}
-							max={moment('09:00pm', 'h:mma').toDate()}
-							onSelectEvent={this.handleSelectEvent}
-							currentUser={this.state.userData.id}
-							dayLayoutAlgorithm={dayLayoutAlgorithm}
-						/>
-					</div>
+					</>
 				) : (
 					<Login onLogin={this.onLogin} />
 				)}
