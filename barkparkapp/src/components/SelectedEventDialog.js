@@ -3,7 +3,7 @@ import firebase from '../firebase';
 
 import Button from './Button';
 
-const DeleteDialog = (props) => {
+const SelectedEventDialog = (props) => {
 
     const {
         selectedEvent,
@@ -45,4 +45,4 @@ const DeleteDialog = (props) => {
         </>
     );
 };
-export default DeleteDialog;
+export default SelectedEventDialog;
