@@ -1,9 +1,10 @@
-import React from 'react';
+import React, { useState } from 'react';
 import firebase from '../firebase';
 
 import Button from './Button';
 
 const SelectedEventDialog = (props) => {
+    const [confirmDelete, setConfirmDelete] = useState(false);
 
     const {
         selectedEvent,
@@ -19,10 +20,8 @@ const SelectedEventDialog = (props) => {
     };
 
     const deleteEvent = () => {
-		if (window.confirm('Are you sure you want to let this timeslot go?')) {
-			const eventRef = firebase.database().ref('events/' + selectedEvent.key);
-			eventRef.remove();
-		}
+        const eventRef = firebase.database().ref('events/' + selectedEvent.key);
+        eventRef.remove();
         toggleModal();
     };
 
@@ -30,18 +29,34 @@ const SelectedEventDialog = (props) => {
         <>
             <h2 className='modal__title'>{eventTime['dayDate']}</h2>
             <h4 className='modal__subtitle'>{eventTime['start']} - {eventTime['end']}</h4>
-            <div className="container">
-                <Button
-                    className="btn btn--display-qr"
-                    onClick={displayCode}
-                    text="Display timeslot code?"
-                />
-                <Button
-                    className="btn btn--delete"
-                    onClick={deleteEvent}
-                    text='Delete this timeslot?'
-                />
-            </div>
+            { ! confirmDelete ? (
+                <div className='container container--flex'>
+                    <Button
+                        className="btn btn--display-qr"
+                        onClick={displayCode}
+                        text="Display timeslot code?"
+                    />
+                    <Button
+                        className="btn btn--delete"
+                        onClick={() => setConfirmDelete(true)}
+                        text='Delete this timeslot?'
+                    />
+                </div>
+            ) : (
+                <div class='container container--center'>
+                    <h3 className='delete-confirmation'>Are you sure you want to let this timeslot go?</h3>
+                    <Button
+                        className="btn btn--delete"
+                        onClick={deleteEvent}
+                        text='Yes! Release the (timeslot) hounds!'
+                    />
+                    <Button
+                        className="btn btn--linklike"
+                        onClick={toggleModal}
+                        text='Nope, I changed my mind.'
+                    />
+                </div>
+            )}
         </>
     );
 };
