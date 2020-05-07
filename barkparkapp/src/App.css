@@ -1,5 +1,5 @@
 .App {
-  position: relative;
+	position: relative;
 }
 
 .App__login {
@@ -20,12 +20,11 @@
 .calendar__header {
 	display: flex;
 	justify-content: space-between;
-  padding-bottom: 20px;
+	padding-bottom: 20px;
 }
 
-
 .header__column {
-  max-width: 60%;
+	max-width: 60%;
 }
 
 .rbc-timeslot-group {
@@ -38,10 +37,9 @@
 }
 
 .rbc-time-column.past-day {
-  background-color: rgba(0,0,0,0.2);
-}s
-
-.rbc-day-slot .rbc-time-slot {
+	background-color: rgba(0, 0, 0, 0.2);
+}
+s .rbc-day-slot .rbc-time-slot {
 	border-top-color: #ddd;
 }
 
@@ -88,7 +86,7 @@
 	text-transform: none;
 	text-transform: capitalize;
 	color: #fff;
-	background: #508DBC;
+	background: #508dbc;
 	border: 0 none;
 	border-radius: 36px;
 	font-size: 13px;
@@ -123,30 +121,30 @@
 }
 
 .btn--delete {
-  background-color: #AB0500;
+	background-color: #ab0500;
 }
 
 .btn--small {
-  padding: 5px 8px;
-  margin: 0;
-  min-width: auto;
-  border-radius: 15px;
+	padding: 5px 8px;
+	margin: 0;
+	min-width: auto;
+	border-radius: 15px;
 }
 
 .btn--linklike {
-  background-color: transparent;
-  text-decoration: underline !important;
-  color: black;
-  border: 0;
-  padding: 10px;
-  margin: 0;
-  display: inline-block;
-  box-shadow: none;
+	background-color: transparent;
+	text-decoration: underline !important;
+	color: black;
+	border: 0;
+	padding: 10px;
+	margin: 0;
+	display: inline-block;
+	box-shadow: none;
 }
 
 .btn--linklike:hover,
 .btn--linklike:focus {
-  text-decoration: none !important;
+	text-decoration: none !important;
 }
 
 form p {
@@ -168,84 +166,84 @@ form input {
 }
 
 .overlay {
-  position: fixed;
-  top: 0;
-  right: 0;
-  bottom: 0;
-  left: 0;
-  width: 100%;
-  height: 100%;
-  background-color: rgba(0,0,0,0.5);
-  z-index: 99;
-  display: flex;
-  align-items: center;
-  justify-content: center;
+	position: fixed;
+	top: 0;
+	right: 0;
+	bottom: 0;
+	left: 0;
+	width: 100%;
+	height: 100%;
+	background-color: rgba(0, 0, 0, 0.5);
+	z-index: 99;
+	display: flex;
+	align-items: center;
+	justify-content: center;
 }
 
 .modal {
-  background-color: white;
-  max-width: 50%;
-  max-height: 50%;
-  padding: 0 30px 30px;
-  border-radius: 4px;
-  position: relative;
-  min-width: 300px;
-  min-height: 200px;
+	background-color: white;
+	max-width: 50%;
+	max-height: 50%;
+	padding: 0 30px 30px;
+	border-radius: 4px;
+	position: relative;
+	min-width: 300px;
+	min-height: 200px;
 }
 
 .modal__close {
-  position: absolute;
-  top: 10px;
-  right: 10px;
+	position: absolute;
+	top: 10px;
+	right: 10px;
 }
 
 .modal__title,
 .modal__subtitle {
-  text-align: center;
+	text-align: center;
 }
 
 .modal__title.warning {
-  color: #88141f;
-  margin-top: 60px;
+	color: #88141f;
+	margin-top: 60px;
 }
 
 .modal__content .container--flex {
-  display: flex;
-  align-items: space-between;
+	display: flex;
+	align-items: space-between;
 }
 
 .modal__content .container--center {
-  text-align: center;
+	text-align: center;
 }
 
 .modal__content .container--center .btn {
-  display: block;
-  margin: 0 auto;
+	display: block;
+	margin: 0 auto;
 }
 
 .modal__content .delete-confirmation {
-  color: #88141f;
+	color: #88141f;
 }
 
 .userslots {
-  border: 1px solid #ddd;
-  padding: 10px;
-  min-height: 130px;
+	border: 1px solid #ddd;
+	padding: 10px;
+	min-height: 130px;
 }
 
 .userslots p {
-  margin-top: 0;
+	margin-top: 0;
 }
 
 .userslots__remaining {
-  font-weight: 900;
+	font-weight: 900;
 }
 
 .userslots__list {
-  margin: 0;
+	margin: 0;
 	min-height: 60px;
 	padding: 0;
-  min-width: 250px;
+	min-width: 250px;
 }
 
 .userslots__list .userslots__item {
@@ -262,22 +260,22 @@ form input {
 }
 
 .userslots__list .userslots__item.expired-item span {
-  text-decoration: line-through;
+	text-decoration: line-through;
 }
 
 .userslots__list .userslots__item span.day {
-  min-width: 40px;
+	min-width: 40px;
 }
 
 .userslots__list .userslots__item span.date {
-  min-width: 65px;
+	min-width: 65px;
 }
 
 .userslots__list .userslots__item span.times {
-  min-width: 150px;
+	min-width: 150px;
 }
 
 .userslots__list .no-slots {
-  list-style-type: none;
+	list-style-type: none;
 	font-size: 12px;
 }
