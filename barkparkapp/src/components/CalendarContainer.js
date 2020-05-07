@@ -20,6 +20,24 @@ const CalendarContainer = (props) => {
 		formatTime,
 	} = props;
 
+	const eventStyleGetter = (event, start, end, isSelected) => {
+		let newStyle = {
+			backgroundColor: 'lightgrey',
+			color: 'black',
+			borderRadius: "0px",
+			border: "none"
+		};
+
+		if (event.userID === userData.id){
+			newStyle.backgroundColor = 'lightgreen'
+		}
+
+		return {
+			className: '',
+			style: newStyle
+		};
+	};
+
 	useEffect(() => {
 		if (events.length === 0) {
 			appService.subscribeToEvents((events) => {
@@ -72,6 +90,7 @@ const CalendarContainer = (props) => {
 				max={moment('09:00pm', 'h:mma').toDate()}
 				onSelectEvent={handleSelectEvent}
 				currentUser={userData.id}
+				eventPropGetter={eventStyleGetter}
 			/>
 		</div>
 	);
