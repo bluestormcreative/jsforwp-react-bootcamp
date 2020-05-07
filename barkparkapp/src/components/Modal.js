@@ -25,11 +25,19 @@ const Modal = (props) => {
                         />
                     )}
                     { props.modalContent === 'expired' && (
-                        <h3 className='modal__title expired'>You can no longer edit that timeslot.</h3>
+                        <h3 className='modal__title warning'>You can no longer edit that timeslot.</h3>
                     )}
 
                     { props.modalContent === 'none-left' && (
-                        <h3 className='modal__title none-left'>Sorry! You've already reserved all your slots this week!</h3>
+                        <h3 className='modal__title warning'>Sorry! You've already reserved all your slots this week!</h3>
+                    )}
+
+                    { props.modalContent === 'slot-length' && (
+                        <h3 className='modal__title warning'>Sorry! Only 30min timeslots allowed.</h3>
+                    )}
+
+                    { props.modalContent === 'notallowed' && (
+                        <h3 className='modal__title warning'>That slot is taken. Please choose another time!</h3>
                     )}
                 </div>
             </div>

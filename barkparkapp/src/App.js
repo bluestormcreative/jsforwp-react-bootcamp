@@ -18,15 +18,15 @@ class App extends Component {
 	state = {
 		events: [],
 		userData: {
-			id: 't9UOnZMj9ib65zlR47YFMQ9WTx22',
-			userName: 'Mo',
+			id: '',
+			userName: 'Stew',
 			userEmail: '',
 			userPhone: '665-567-7890',
-			petNames: ['Leo', 'Lucy'],
+			petNames: ['Lucy', 'Leo'],
 			reservedSlots: [],
 			availSlots: 3,
 		},
-		isAuthenticated: true,
+		isAuthenticated: false,
 		modalOpen: false,
 		modalContent: '',
 		selectedEvent: {},
@@ -42,7 +42,6 @@ class App extends Component {
 			.auth()
 			.signInWithEmailAndPassword(userEmail, userPass)
 			.then((user) => {
-				console.log(user); // eslint-disable-line no-console
 				this.setState({
 					userData: {
 						...this.state.userData,
@@ -70,7 +69,10 @@ class App extends Component {
 			.catch((error) => console.error(error));
 	};
 
-		getPrevSiblings = (elem, selector) => {
+	/**
+	 * Get previous sibling elements that match a selector.
+	 */
+	getPrevSiblings = (elem, selector) => {
 		let sibling = elem.previousElementSibling;
 		let allSiblings = [];
 
@@ -97,7 +99,6 @@ class App extends Component {
 		}
 
 		const dayCols = this.getPrevSiblings(today, '.rbc-day-slot');
-	console.log(dayCols); // eslint-disable-line no-console
 		for (const day of dayCols ) {
 			day.classList.add('past-day');
 		}
@@ -123,7 +124,10 @@ class App extends Component {
 		// Return if the user tries to select a longer timeslot.
 		// TODO try to disable select by drag so we don't need this...
 		if (slots.length > 2) {
-			alert(`Sorry, only 30 minute slots allowed!`);
+			this.setState({
+				modalContent: 'slot-length',
+				modalOpen: true,
+			})
 			return false;
 		}
 
@@ -152,9 +156,7 @@ class App extends Component {
 			userData.availSlots
 		);
 
-		const wantCreateEvent = true; // TODO Update this with user confirmation modal.
-
-		if (canCreateEvent && wantCreateEvent) {
+		if (canCreateEvent) {
 			const title = `${userData.userName} & ${userData.petNames[0]}`;
 			const qrValue = uuidv4();
 			const newEvent = {
@@ -188,6 +190,9 @@ class App extends Component {
 		if (event.start.getTime() < now.getTime()) {
 			contentFlag = 'expired';
 		}
+		if (event.userID !== this.state.userData.id) {
+			contentFlag = 'notallowed';
+		}
 
 		this.setState({
 			modalOpen: true,
@@ -202,8 +207,8 @@ class App extends Component {
 	toggleModal = () => {
 		this.setState({
 			modalOpen: ! this.state.modalOpen,
-			modalContent: this.state.modalContent || '',
-			selectedEvent: this.state.selectedEvent || {},
+			modalContent: this.state.modalContent,
+			selectedEvent: this.state.selectedEvent,
 		});
 	};
 
@@ -235,6 +240,10 @@ class App extends Component {
 			});
 		});
 
+		this.shadePastDays();
+	}
+
+	componentDidUpdate() {
 		this.shadePastDays();
 	}
 
