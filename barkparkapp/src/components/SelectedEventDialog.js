@@ -11,7 +11,9 @@ const DeleteDialog = (props) => {
         toggleModal,
     } = props;
 
-    const startTime = moment(selectedEvent.start).format('h:mma');
+    const eventTimes = moment(selectedEvent.start);
+    const dayDate = eventTimes.format('ddd MMM Do');
+    const startTime = eventTimes.format('h:mma');
     const endTime = moment(selectedEvent.end).format('h:mma');
 
     const displayCode = () => {
@@ -29,7 +31,8 @@ const DeleteDialog = (props) => {
 
     return(
         <>
-            <h2 className='modal__title'>{startTime} - {endTime}</h2>
+            <h2 className='modal__title'>{dayDate}</h2>
+            <h4 className='modal__subtitle'>{startTime} - {endTime}</h4>
             <div className="container">
                 <Button
                     className="btn btn--display-qr"

@@ -1,9 +1,8 @@
 import React from 'react';
-import DeleteDialog from './DeleteDialog';
+import SelectedEventDialog from './SelectedEventDialog';
 
 const Modal = (props) => {
 
-    // Render nothing if the "show" prop is false
     if ( ! props.modalOpen ) {
         return null;
     }
@@ -13,10 +12,12 @@ const Modal = (props) => {
             <div className='modal'>
                 <button className="modal__close" onClick={props.closeModal}>Close</button>
                 <div className='modal__content'>
-                    <DeleteDialog
-                        selectedEvent={props.selectedEvent}
-                        toggleModal={props.toggleModal}
-                    />
+                    { props.modalContent === 'delete' && (
+                        <SelectedEventDialog
+                            selectedEvent={props.selectedEvent}
+                            toggleModal={props.toggleModal}
+                        />
+                    )}
                 </div>
             </div>
         </div>
