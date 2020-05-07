@@ -19,7 +19,7 @@ const SelectedEventDialog = (props) => {
     };
 
     const deleteEvent = () => {
-		if (window.confirm('Delete this event?')) {
+		if (window.confirm('Are you sure you want to let this timeslot go?')) {
 			const eventRef = firebase.database().ref('events/' + selectedEvent.key);
 			eventRef.remove();
 		}
@@ -34,12 +34,12 @@ const SelectedEventDialog = (props) => {
                 <Button
                     className="btn btn--display-qr"
                     onClick={displayCode}
-                    text="Display event code?"
+                    text="Display timeslot code?"
                 />
                 <Button
                     className="btn btn--delete"
                     onClick={deleteEvent}
-                    text='Delete this event?'
+                    text='Delete this timeslot?'
                 />
             </div>
         </>
