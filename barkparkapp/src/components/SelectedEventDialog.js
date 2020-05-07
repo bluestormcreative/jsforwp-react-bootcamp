@@ -2,9 +2,11 @@ import React, { useState } from 'react';
 import firebase from '../firebase';
 
 import Button from './Button';
+import EventQR from './EventQR';
 
 const SelectedEventDialog = (props) => {
     const [confirmDelete, setConfirmDelete] = useState(false);
+    const [createQR, setCreateQR] = useState(false);
 
     const {
         selectedEvent,
@@ -29,11 +31,11 @@ const SelectedEventDialog = (props) => {
         <>
             <h2 className='modal__title'>{eventTime['dayDate']}</h2>
             <h4 className='modal__subtitle'>{eventTime['start']} - {eventTime['end']}</h4>
-            { ! confirmDelete ? (
+            { ! confirmDelete && ! createQR && (
                 <div className='container container--flex'>
                     <Button
                         className="btn btn--display-qr"
-                        onClick={displayCode}
+                        onClick={() => setCreateQR(true)}
                         text="Display timeslot code?"
                     />
                     <Button
@@ -42,7 +44,8 @@ const SelectedEventDialog = (props) => {
                         text='Delete this timeslot?'
                     />
                 </div>
-            ) : (
+            )}
+            { confirmDelete && ! createQR && (
                 <div class='container container--center'>
                     <h3 className='delete-confirmation'>Are you sure you want to let this timeslot go?</h3>
                     <Button
@@ -55,6 +58,12 @@ const SelectedEventDialog = (props) => {
                         onClick={toggleModal}
                         text='Nope, I changed my mind.'
                     />
+                </div>
+            )}
+
+            { ! confirmDelete && createQR && (
+                <div class='container container--center'>
+                    <EventQR qrvalue={selectedEvent.qrValue} />
                 </div>
             )}
         </>
