@@ -16,11 +16,6 @@ const SelectedEventDialog = (props) => {
 
     const eventTime = formatTime(selectedEvent);
 
-    const displayCode = () => {
-        console.log('display code'); // eslint-disable-line no-console
-        toggleModal();
-    };
-
     const deleteEvent = () => {
         const eventRef = firebase.database().ref('events/' + selectedEvent.key);
         eventRef.remove();
