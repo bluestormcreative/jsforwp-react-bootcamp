@@ -1,5 +1,4 @@
 import React, { useState } from 'react';
-import firebase from 'firebase';
 
 import Button from './Button';
 import EventQR from './EventQR';
@@ -13,7 +12,6 @@ const SelectedEventDialog = (props) => {
 		toggleModal,
 		formatTime,
 		deleteEvent,
-		userData,
 		updateUserData,
 	} = props;
 
@@ -64,7 +62,6 @@ const SelectedEventDialog = (props) => {
 					/>
 				</div>
 			)}
-
 			{!confirmDelete && createQR && (
 				<div className='container container--center'>
 					<EventQR qrvalue={selectedEvent.qrValue} />
