@@ -1,7 +1,6 @@
 import React, { Component } from 'react';
 import firebase from './firebase';
 import { v4 as uuidv4 } from 'uuid';
-import QRCode from 'qrcode.react';
 import { Calendar, momentLocalizer } from 'react-big-calendar';
 import moment from 'moment';
 
