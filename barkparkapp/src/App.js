@@ -294,6 +294,7 @@ class App extends Component {
 							toggleModal={this.toggleModal}
 							formatTime={this.formatEventTime}
 							deleteEvent={this.props.appService.deleteEvent}
+							availSlots={this.state.userData.availSlots}
 						/>
 						<div className='calendar__container'>
 							<div className='calendar__header'>

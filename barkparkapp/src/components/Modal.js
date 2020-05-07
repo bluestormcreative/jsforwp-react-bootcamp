@@ -11,6 +11,7 @@ const Modal = (props) => {
 		selectedEvent,
 		formatTime,
 		deleteEvent,
+		availSlots,
 	} = props;
 
 	if (!modalOpen) {
@@ -34,7 +35,10 @@ const Modal = (props) => {
 							deleteEvent={deleteEvent}
 						/>
 					) : (
-						<WarningDialog type={modalContent} />
+						<WarningDialog
+							type={modalContent}
+							availSlots={availSlots}
+						/>
 					)}
 				</div>
 			</div>
