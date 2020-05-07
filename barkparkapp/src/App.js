@@ -190,9 +190,9 @@ class App extends Component {
 		if (event.start.getTime() < now.getTime()) {
 			contentFlag = 'expired';
 		}
-		if (event.userID !== this.state.userData.id) {
-			contentFlag = 'notallowed';
-		}
+		// if (event.userID !== this.state.userData.id) {
+		// 	contentFlag = 'notallowed';
+		// }
 
 		this.setState({
 			modalOpen: true,
