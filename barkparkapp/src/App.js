@@ -198,21 +198,38 @@ class App extends Component {
 		});
 	}
 
+	/**
+	 * Format time data from an event object.
+	 */
+	formatEventTime = (obj) => {
+		if (typeof obj !== 'object' ) {
+			return null;
+		}
+
+		let eventTime = [];
+			const key = moment(obj.start);
+			eventTime['eventKey'] = key;
+			eventTime['dayDate'] = key.format('ddd MMM Do');
+			eventTime['start'] = key.format('h:mma');
+			eventTime['end'] = moment(obj.end).format('h:mma');
+
+		return eventTime;
+	};
+
 	render() {
 		const remainingSlots =
 			this.state.userData.availSlots -
 			this.state.userData.reservedSlots.length;
 
-		let currentSlots = this.state.userData.reservedSlots.map((obj, i) => {
-			const upcoming = moment(obj.start);
-			const dayDate = upcoming.format('ddd MMM Do');
-			const startTime = upcoming.format('h:mma');
-			const endTime = moment(obj.end).format('h:mma');
+		let currentSlots = this.state.userData.reservedSlots.map((obj) => {
+
+			const eventTime = this.formatEventTime(obj);
+
 			return (
-				<li key={upcoming}>
-					<span>{dayDate}:</span>
+				<li key={eventTime['eventKey']}>
+					<span>{eventTime['dayDate']}:</span>
 					<span>
-						{startTime} - {endTime}
+						{eventTime['start']} - {eventTime['end']}
 					</span>
 				</li>
 			);
@@ -237,6 +254,7 @@ class App extends Component {
 						modalContent={this.state.modalContent}
 						selectedEvent={this.state.selectedEvent}
 						toggleModal={this.toggleModal}
+						formatTime={this.formatEventTime}
 					/>
 						<div className='calendar__container'>
 							<div className='calendar__header'>

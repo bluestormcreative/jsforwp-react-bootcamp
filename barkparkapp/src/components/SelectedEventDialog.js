@@ -1,6 +1,5 @@
 import React from 'react';
 import firebase from '../firebase';
-import moment from 'moment';
 
 import Button from './Button';
 
@@ -9,12 +8,10 @@ const DeleteDialog = (props) => {
     const {
         selectedEvent,
         toggleModal,
+        formatTime,
     } = props;
 
-    const eventTimes = moment(selectedEvent.start);
-    const dayDate = eventTimes.format('ddd MMM Do');
-    const startTime = eventTimes.format('h:mma');
-    const endTime = moment(selectedEvent.end).format('h:mma');
+    const eventTime = formatTime(selectedEvent);
 
     const displayCode = () => {
         console.log('display code'); // eslint-disable-line no-console
@@ -31,8 +28,8 @@ const DeleteDialog = (props) => {
 
     return(
         <>
-            <h2 className='modal__title'>{dayDate}</h2>
-            <h4 className='modal__subtitle'>{startTime} - {endTime}</h4>
+            <h2 className='modal__title'>{eventTime['dayDate']}</h2>
+            <h4 className='modal__subtitle'>{eventTime['start']} - {eventTime['end']}</h4>
             <div className="container">
                 <Button
                     className="btn btn--display-qr"

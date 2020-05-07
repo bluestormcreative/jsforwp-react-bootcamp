@@ -16,6 +16,7 @@ const Modal = (props) => {
                         <SelectedEventDialog
                             selectedEvent={props.selectedEvent}
                             toggleModal={props.toggleModal}
+                            formatTime={props.formatTime}
                         />
                     )}
                 </div>
