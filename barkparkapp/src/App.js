@@ -20,24 +20,10 @@ function App(props) {
 	const { appService } = props;
 
 	/**
-	 * Authenticate with database on login
+	 * Authenticate on login
 	 *
 	 * return void
 	 */
-	// const onLogin = (userEmail, userPass) => {
-	// 	appService
-	// 		.login(userEmail, userPass)
-	// 		.then((response) => {
-	// 			const newUserData = appService.getUserData(response.user);
-	// 			console.log('onlogin data', newUserData); // eslint-disable-line no-console
-	// 			if (newUserData) {
-	// 				setUserData({ ...newUserData });
-	// 				setIsAuthenticated(true);
-	// 			}
-	// 		})
-	// 		.catch((error) => console.error(error));
-	// };
-
 	const onLogin = (email, password) => {
 		firebase
 			.auth()
@@ -71,6 +57,25 @@ function App(props) {
 	};
 
 	/**
+	 * Get previous sibling elements that match a selector.
+	 */
+	const getPrevSiblings = (elem, selector) => {
+		let sibling = elem.previousElementSibling;
+		let allSiblings = [];
+
+		// If the sibling matches our selector, use it
+		// If not, jump to the next sibling and continue the loop
+		while (sibling) {
+			if (sibling.matches(selector)) {
+				allSiblings.push(sibling);
+			}
+			sibling = sibling.previousElementSibling;
+		}
+
+		return allSiblings;
+	};
+
+	/**
 	 * Add class selector to past day columns.
 	 */
 	const shadePastDays = () => {
@@ -80,7 +85,7 @@ function App(props) {
 			return;
 		}
 
-		const dayCols = this.getPrevSiblings(today, '.rbc-day-slot');
+		const dayCols = getPrevSiblings(today, '.rbc-day-slot');
 		for (const day of dayCols) {
 			day.classList.add('past-day');
 		}
@@ -123,8 +128,6 @@ function App(props) {
 	 * Create a new event associated with the selected slot.
 	 */
 	const handleNewEvent = ({ slots, start, end }) => {
-		const { userData } = this.state;
-
 		const canCreateEvent = checkIfEventCanBeCreated(
 			slots,
 			start,
@@ -143,13 +146,6 @@ function App(props) {
 				userID: userData.id,
 				qrValue: qrValue,
 			};
-			// this.setState({
-			// 	userData: {
-			// 		...userData,
-			// 		reservedSlots: [...userData.reservedSlots, newEvent],
-			// 	},
-			// });
-			// setUserData({...userData});
 
 			delete newEvent.key;
 			appService.saveNewEvent(newEvent);
@@ -167,7 +163,7 @@ function App(props) {
 			contentFlag = 'expired';
 		}
 
-		if (event.userID !== this.state.userData.id) {
+		if (event.userID !== userData.id) {
 			contentFlag = 'notAllowed';
 		}
 
@@ -183,25 +179,6 @@ function App(props) {
 		setModalContent(modalContent);
 		setModalOpen(!modalOpen);
 		setSelectedEvent(selectedEvent);
-	};
-
-	/**
-	 * Get previous sibling elements that match a selector.
-	 */
-	const getPrevSiblings = (elem, selector) => {
-		let sibling = elem.previousElementSibling;
-		let allSiblings = [];
-
-		// If the sibling matches our selector, use it
-		// If not, jump to the next sibling and continue the loop
-		while (sibling) {
-			if (sibling.matches(selector)) {
-				allSiblings.push(sibling);
-			}
-			sibling = sibling.previousElementSibling;
-		}
-
-		return allSiblings;
 	};
 
 	/**
@@ -234,7 +211,7 @@ function App(props) {
 	 * Update state from data source after component mounted.
 	 */
 	useEffect(() => {
-		//	shadePastDays();
+		shadePastDays();
 	});
 
 	const remainingSlots = 1;
