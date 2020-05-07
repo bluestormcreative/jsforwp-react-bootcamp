@@ -204,8 +204,7 @@ form input {
   text-align: center;
 }
 
-.modal__title.expired,
-.modal__title.none-left {
+.modal__title.warning {
   color: #88141f;
   margin-top: 60px;
 }
