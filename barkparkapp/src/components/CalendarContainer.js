@@ -22,14 +22,15 @@ const CalendarContainer = (props) => {
 
 	const eventStyleGetter = (event, start, end, isSelected) => {
 		let newStyle = {
-			backgroundColor: 'lightgrey',
-			color: 'black',
+			backgroundColor: '#265985',
+			color: '#ffffff',
 			borderRadius: "0px",
 			border: "none"
 		};
 
 		if (event.userID === userData.id){
-			newStyle.backgroundColor = 'lightgreen'
+			newStyle.backgroundColor = '#90EE90';
+			newStyle.color = '#000000';
 		}
 
 		return {

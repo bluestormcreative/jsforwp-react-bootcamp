@@ -9,6 +9,10 @@ const WarningDialog = (props) => {
 		notAllowed: `That slot is taken. Please choose another time!`,
 	};
 
-	return <h3 className='modal__title warning'>{warnings[props.type]}</h3>;
+	return (
+		<div className='container container--flex'>
+			<h3 className='modal__title warning'>{warnings[props.type]}</h3>
+		</div>
+	);
 };
 export default WarningDialog;
