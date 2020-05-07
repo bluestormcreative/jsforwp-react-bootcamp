@@ -1,9 +1,19 @@
 import React from 'react';
 import SelectedEventDialog from './SelectedEventDialog';
+import WarningDialog from './WarningDialog';
 import Button from './Button';
 
 const Modal = (props) => {
-	if (!props.modalOpen) {
+	const {
+		modalOpen,
+		toggleModal,
+		modalContent,
+		selectedEvent,
+		formatTime,
+		deleteEvent,
+	} = props;
+
+	if (!modalOpen) {
 		return null;
 	}
 
@@ -12,41 +22,19 @@ const Modal = (props) => {
 			<div className='modal'>
 				<Button
 					className='btn btn--small modal__close'
-					onClick={props.toggleModal}
+					onClick={toggleModal}
 					text='Close'
 				/>
 				<div className='modal__content'>
-					{props.modalContent === 'delete' && (
+					{modalContent === 'delete' ? (
 						<SelectedEventDialog
-							selectedEvent={props.selectedEvent}
-							toggleModal={props.toggleModal}
-							formatTime={props.formatTime}
-							deleteEvent={props.deleteEvent}
+							selectedEvent={selectedEvent}
+							toggleModal={toggleModal}
+							formatTime={formatTime}
+							deleteEvent={deleteEvent}
 						/>
-					)}
-					{props.modalContent === 'expired' && (
-						<h3 className='modal__title warning'>
-							You can no longer edit that timeslot.
-						</h3>
-					)}
-
-					{props.modalContent === 'none-left' && (
-						<h3 className='modal__title warning'>
-							Sorry! You've already reserved all your slots this
-							week!
-						</h3>
-					)}
-
-					{props.modalContent === 'slot-length' && (
-						<h3 className='modal__title warning'>
-							Sorry! Only 30min timeslots allowed.
-						</h3>
-					)}
-
-					{props.modalContent === 'notallowed' && (
-						<h3 className='modal__title warning'>
-							That slot is taken. Please choose another time!
-						</h3>
+					) : (
+						<WarningDialog type={modalContent} />
 					)}
 				</div>
 			</div>

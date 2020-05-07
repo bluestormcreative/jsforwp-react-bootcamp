@@ -102,7 +102,7 @@ class App extends Component {
 		// TODO try to disable select by drag so we don't need this...
 		if (slots.length > 2) {
 			this.setState({
-				modalContent: 'slot-length',
+				modalContent: 'slotLength',
 				modalOpen: true,
 			});
 			return false;
@@ -111,7 +111,7 @@ class App extends Component {
 		// Return if user has already reserved all their available slots.
 		if (reserved.length > avail - 1) {
 			this.setState({
-				modalContent: 'none-left',
+				modalContent: 'noneLeft',
 				modalOpen: true,
 			});
 			return false;
@@ -168,7 +168,7 @@ class App extends Component {
 		}
 
 		if (event.userID !== this.state.userData.id) {
-			contentFlag = 'notallowed';
+			contentFlag = 'notAllowed';
 		}
 
 		this.setState({
