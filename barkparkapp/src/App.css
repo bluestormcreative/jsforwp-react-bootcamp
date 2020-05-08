@@ -46,9 +46,18 @@
 }
 
 .rbc-time-column.past-day {
-	background-color: rgba(45, 53, 150, 0.1);;
+	background-color: rgba(45, 53, 150, 0.1);
 }
-s .rbc-day-slot .rbc-time-slot {
+
+.rbc-time-column.rbc-today {
+	background-color: #c0e4ff;
+}
+
+.rbc-current-time-indicator {
+	height: 2px;
+}
+
+.rbc-day-slot .rbc-time-slot {
 	border-top-color: #ddd;
 }
 
