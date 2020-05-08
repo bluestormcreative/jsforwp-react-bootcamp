@@ -42,7 +42,7 @@
 }
 
 .rbc-time-column .rbc-timeslot-group {
-	border-bottom: 1px solid #ddd;
+	border-bottom: 1px solid #bdbdbd;
 }
 
 .rbc-time-column.past-day {
@@ -61,7 +61,7 @@
 }
 
 .rbc-day-slot .rbc-time-slot {
-	border-top-color: #ddd;
+	border-top-color: #cecece;
 }
 
 .rbc-day-slot .rbc-events-container {
