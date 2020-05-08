@@ -48,6 +48,9 @@
 .rbc-time-column.past-day {
 	background-color: rgba(45, 53, 150, 0.1);
 }
+.rbc-time-column.past-day .rbc-event {
+	background-color: rgb(152, 177, 152) !important;
+}
 
 .rbc-time-column.rbc-today {
 	background-color: #c0e4ff;
